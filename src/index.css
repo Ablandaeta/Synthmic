@@ -1,0 +1,42 @@
+:root {
+  /* --- PALETA SYNTHMIC --- */
+  
+  /* Fondo general (Madera podrida/oscura del cofre) */
+  --bg-color: #2b1d14; 
+  
+  /* Color de texto principal (Hueso/Pergamino) */
+  --text-color: #eecfa1; 
+  
+  /* Acentos (para cuando hagamos los ojos o luces) */
+  --accent-color: #6e0e0e; /* Rojo sangre seca (opcional para después) */
+  
+  font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
+}
+.darkTheme {
+  --color-background: var(--bg-color);
+  --color-foreground: var(--text-color);
+}
+.lightTheme {
+  --color-background: var(--text-color);
+  --color-foreground: var(--bg-color);
+}
+body {
+  margin: 0;
+  display: flex;
+  place-items: center;
+  justify-content: center; /* Centra todo horizontalmente */
+  min-width: 320px;
+  min-height: 100vh;
+  
+  /* Aquí aplicamos las variables */
+  background-color: var(--color-background);
+  color: var(--color-foreground);
+}
+
+.text-accent {
+  color: var(--accent-color);
+}
+
+.text-center {
+  text-align: center;
+}
