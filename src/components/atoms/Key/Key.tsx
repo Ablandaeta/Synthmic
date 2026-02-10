@@ -22,13 +22,27 @@ export default function Key({ note, frequency, isBlack = false, onPress, onRelea
     onRelease();                 // A. Cortamos el sonido
     hoverHandlers.onMouseLeave(); // B. Ocultamos el tooltip
   };
+  const handleMouseEnter = (e: React.MouseEvent) => {
+    // A. mostrar el tooltip (si no lo está ya)
+    hoverHandlers.onMouseEnter();
+    // B. Si el usuario está arrastrando el mouse con el botón izquierdo apretado, también queremos tocar la nota
+    if (e.buttons === 1) {
+      onPress(frequency); 
+    }
+  };
+
+  // 3. Pequeño ajuste para evitar que se seleccione el texto al arrastrar
+  const handleMouseDown = (e: React.MouseEvent) => {
+    e.preventDefault(); // Evita comportamientos raros del navegador
+    onPress(frequency);
+  };
 
   return (
    
     <button
       className={className}
       // EVENTOS DE SONIDO (PRESS)
-      onMouseDown={() => onPress(frequency)}
+      onMouseDown={handleMouseDown}
       onTouchStart={() => onPress(frequency)}
       
       // EVENTOS DE SONIDO (RELEASE)
@@ -36,8 +50,8 @@ export default function Key({ note, frequency, isBlack = false, onPress, onRelea
       onTouchEnd={onRelease}
 
       
-      // Usamos el onMouseEnter del hook directamente
-      onMouseEnter={hoverHandlers.onMouseEnter}
+      // Usamos el handleMouseEnter para detectar si el usuario está arrastrando el mouse mientras lo tiene apretado
+      onMouseEnter={handleMouseEnter}
       
       // Y usamos nuestra función combinada para el Leave
       onMouseLeave={handleMouseLeave}
