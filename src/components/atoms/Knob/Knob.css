@@ -1,0 +1,78 @@
+/* La cuenca del ojo (El marco fijo) */
+.knob-socket {
+  position: relative;
+  width: 80px;
+  height: 80px;
+  background-color: #3e2723; /* Carne oscura */
+  border-radius: 50%;
+  box-shadow: 
+    inset 2px 2px 5px rgba(0,0,0,0.7), /* Profundidad */
+    0 0 0 4px #2b1d14, /* Borde de piel */
+    0 0 10px rgba(0,0,0,0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 10px;
+}
+
+/* El globo ocular (La parte que gira) */
+.knob-eyeball {
+  width: 60px;
+  height: 60px;
+  background: radial-gradient(circle at 30% 30%, #fff 0%, #eecfa1 60%, #dba675 100%); /* Efecto 3D esférico */
+  border-radius: 50%;
+  position: relative;
+  cursor: ns-resize; /* Cursor de "arriba-abajo" */
+  box-shadow: 0 0 5px rgba(0,0,0,0.5);
+}
+
+/* El Iris (El color del ojo) */
+.knob-iris {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 25px;
+  height: 25px;
+  background: radial-gradient(circle, #4caf50 0%, #1b5e20 100%); /* Verde reptil */
+  border-radius: 50%;
+  border: 1px solid #1b5e20;
+}
+
+/* La Pupila (La línea negra que indica el valor) */
+.knob-pupil {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 3px; /* Pupila de gato */
+  height: 20px;
+  background-color: #000;
+  border-radius: 50%;
+}
+
+/* Un brillo para darle vida (reflejo) */
+.knob-glint {
+  position: absolute;
+  top: 15px;
+  left: 15px;
+  width: 8px;
+  height: 8px;
+  background-color: white;
+  border-radius: 50%;
+  opacity: 0.8;
+  pointer-events: none; /* Que no estorbe al click */
+}
+
+/* Etiqueta debajo */
+.knob-label {
+  position: absolute;
+  bottom: -25px;
+  width: 100%;
+  text-align: center;
+  font-size: 12px;
+  color: var(--text-color);
+  font-family: monospace;
+  text-transform: uppercase;
+}
+
