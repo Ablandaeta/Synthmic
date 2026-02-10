@@ -1,73 +1,146 @@
-# React + TypeScript + Vite
+# Synthmic - A D&D Mimic Synthesizer
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Un sintetizador web tematizado como un **Mimic** (imitador) del Dungeons & Dragons, creado para aprender cómo funciona el audio en navegadores. Construido con **React**, **Vite** y **Bun**.
 
-Currently, two official plugins are available:
+## 🎹 Características
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+- **Teclado Sintetizador**: 13 teclas (octava completa con sostenidos)
+- **Osciladores**: Generación de ondas de audio (sawtooth, sine, square, triangle)
+- **Control ADSR**: Attack, Decay, Sustain, Release para moldeamiento de sonido
+- **UI Tematizada**: Diseño visual inspirado en un Mimic del D&D
+- **Aprendizaje Interactivo**: Código fuente educativo sobre Web Audio API
 
-## React Compiler
+## 🛠 Stack Tecnológico
 
-The React Compiler is currently not compatible with SWC. See [this issue](https://github.com/vitejs/vite-plugin-react/issues/428) for tracking the progress.
+- **Frontend**: React 19 + TypeScript
+- **Build Tool**: Vite 7
+- **Runtime**: Bun
+- **Audio**: Web Audio API
+- **Linting**: ESLint + TypeScript ESLint
 
-## Expanding the ESLint configuration
+## 📦 Instalación
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+```bash
+# Clonar o descargar el proyecto
+cd Synthmic
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
-
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+# Instalar dependencias con Bun
+bun install
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+## 🚀 Scripts Disponibles
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+```bash
+# Desarrollo local con HMR
+bun run dev
 
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+# Compilar para producción
+bun run build
+
+# Vista previa de la build
+bun run preview
+
+# Linting de código
+bun run lint
 ```
+
+## 📁 Estructura del Proyecto
+
+```
+src/
+├── components/
+│   ├── atoms/          # Componentes reutilizables (Key, Knob, Display)
+│   ├── modules/        # Módulos funcionales (Keyboard, OscillatorModule, MasterModule)
+│   └── layout/         # Layout principal (SynthChassis)
+├── audio/
+│   ├── AudioEngine.ts  # Motor de síntesis de audio
+│   ├── Oscillators.ts  # Generadores de ondas
+│   └── ADSR.ts         # Envolvente ADSR
+├── data/
+│   └── note.ts         # Frecuencias de notas musicales
+├── hooks/
+│   ├── useAudio.ts     # Hook para contexto de audio
+│   └── useKeyboard.ts  # Hook para inputs de teclado
+├── types/              # Tipos TypeScript compartidos
+└── main.tsx            # Punto de entrada
+```
+
+## 🎮 Cómo Usar
+
+1. Inicia el servidor de desarrollo: `bun run dev`
+2. Abre http://localhost:5173
+3. **Presiona las teclas del teclado** para tocar notas
+4. Ajusta los **controles** (Knobs) para modificar:
+   - Oscilador (forma de onda)
+   - ADSR (envolvente de sonido)
+   - Volumen y efectos
+
+## 🎵 Características de Audio
+
+### Osciladores Soportados
+- Sawtooth (diente de sierra)
+- Sine (sinusoide)
+- Square (onda cuadrada)
+- Triangle (triangular)
+
+### Envolvente ADSR
+- **Attack**: Tiempo para alcanzar volumen máximo
+- **Decay**: Tiempo para caer al nivel de sustain
+- **Sustain**: Nivel de volumen sostenido
+- **Release**: Tiempo para silenciar después de soltar la tecla
+
+## 📚 Propósito Educativo
+
+Este proyecto es ideal para aprender:
+- ✅ Web Audio API fundamentals
+- ✅ Síntesis de audio básica
+- ✅ Osciladores y envolventes
+- ✅ React hooks CustomHooks
+- ✅ TypeScript avanzado
+- ✅ Gestión de estado en aplicaciones de audio
+
+## 🏗️ Principios de Desarrollo
+
+El código sigue principios **SOLID** y buenas prácticas de desarrollo:
+
+- **S**ingle Responsibility: Cada componente tiene una única responsabilidad
+- **O**pen/Closed: Abierto a extensión, cerrado a modificación
+- **L**iskov Substitution: Componentes intercambiables
+- **I**nterface Segregation: Interfaces específicas, no genéricas
+- **D**ependency Inversion: Inversión de dependencias con hooks y contexto
+
+Además:
+- Estructura de carpetas por feature/tipo
+- Separación de lógica (audio, hooks, componentes)
+- Tipado fuerte con TypeScript
+- Alias de importación para código más limpio
+- Nomenclatura consistente
+
+## ⚙️ Configuración de Alias
+
+El proyecto usa alias de importación para código más limpio:
+
+```typescript
+import { Note } from '@/data/note';
+import { Key } from '@/components/atoms/Key';
+import { synth } from '@/audio/AudioEngine';
+```
+
+Configurado en `tsconfig.app.json` y `vite.config.ts`
+
+## 🐛 Desarrollo
+
+Para añadir nuevas características:
+
+1. Crea componentes en `src/components/`
+2. Lógica de audio en `src/audio/`
+3. Tipos en `src/types/index.ts`
+4. Ejecuta `bun run lint` antes de commitear
+
+## 📝 Licencia
+
+Este proyecto es de código abierto para propósitos educativos.
+
+---
+
+**Hecho con 🎵 y 🦁 (Mimic power!)**
