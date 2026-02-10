@@ -1,0 +1,32 @@
+/* La base del diente */
+.key-tooth {
+  position: relative;
+  width: 60px;
+  height: 200px;
+  background-color: var(--text-color); /* Color Hueso */
+  border: 2px solid #1a110d7a; /* Borde oscuro para definir */
+  border-top: none; 
+  border-radius: 0 0 75px 25px; /* ¡La forma de colmillo! */
+  cursor: pointer;
+  transition: all 0.1s ease;
+  
+  /* Sombra para darle volumen 3D */
+  box-shadow: inset -5px -5px 15px rgba(0,0,0,0.2);
+}
+
+/* Efecto al presionar (se hunde un poco) */
+.key-tooth:active, .key-tooth.pressed {
+  transform: translateY(5px);
+  box-shadow: inset 0 0 50px rgba(0,0,0,0.5);
+}
+
+/* --- TECLAS NEGRAS --- */
+.key-tooth.black {
+  background-color: #4a3b2a; /* Madera muy oscura o diente podrido */
+  width: 40px;
+  height: 120px;
+  z-index: 2; /* Para que flote encima de las blancas */
+  position: absolute; 
+  left: 70%; /* Se coloca para posicionar entre las blancas */
+  border-radius: 0 0 25px 50px;  
+}
