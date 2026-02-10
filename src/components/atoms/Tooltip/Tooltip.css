@@ -1,0 +1,32 @@
+.tooltip-container {
+  position: absolute;
+  top: -35px;
+  left: 50%;
+  transform: translateX(-50%);  
+  background-color: rgba(0, 0, 0, 0.9);
+  color: var(--color-foreground);
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-size: 12px;
+  font-family: monospace;
+  white-space: nowrap;
+  pointer-events: none;
+  z-index: 100;
+  
+  animation: fadeIn 0.2s forwards;
+}
+
+.tooltip-arrow {
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  border-width: 5px;
+  border-style: solid;
+  border-color: rgba(0, 0, 0, 0.9) transparent transparent transparent;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateX(-50%) translateY(5px); }
+  to { opacity: 1; transform: translateX(-50%) translateY(0); }
+}

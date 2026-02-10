@@ -1,5 +1,7 @@
 import './Knob.css';
 import { useDragControl } from '@/hooks/useDragControl';
+import { useHover } from '@/hooks/useHover'; 
+import { Tooltip } from '@/components/atoms/Tooltip'; 
 
 interface KnobProps {
   label?: string;
@@ -7,24 +9,36 @@ interface KnobProps {
   max?: number;
   value: number;
   onChange: (value: number) => void;
+  formatTooltip?: (val: number) => string
 }
 
-export default function Knob({ label, min = 0, max = 1, value, onChange }: KnobProps) {
+export default function Knob({ 
+  label, min = 0, max = 1, value, onChange, 
+  // Por defecto, formateamos a porcentaje, pero se puede cambiar desde fuera
+  formatTooltip = (v) => `${Math.round(((v - min) / (max - min)) * 100)}%`
+}: KnobProps) {
   
-    // 1. Usamos el hook para manejar la lógica de arrastre
-    const { handleMouseDown } = useDragControl({ 
+  // 1. Usamos el hook para manejar la lógica de arrastre
+  const { handleMouseDown, isDragging } = useDragControl({ 
     value, 
     onChange, 
     min, 
     max 
   });
+  // 2. Usamos el hook para manejar el hover (para mostrar el tooltip)
+  const { isHovered, hoverHandlers } = useHover();
 
-  // 2. Solo calculamos lo visual (Grados)
+  // 3. Solo calculamos lo visual (Grados)
   const percentage = (value - min) / (max - min);
   const rotation = -135 + (percentage * 270);
-
+  
   return (
-    <div className="knob-socket">
+    <div className="knob-socket"
+    {...hoverHandlers}>
+        <Tooltip 
+        text={formatTooltip(value)} 
+        isShow={isDragging || isHovered} 
+      />
       <div 
         className="knob-eyeball" 
         onMouseDown={handleMouseDown} // Conectamos el evento del hook aquí
