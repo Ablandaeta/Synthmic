@@ -1,3 +1,10 @@
+// Extendemos el global Window para incluir webkitAudioContext de Safari
+declare global {
+  interface Window {
+    webkitAudioContext?: typeof AudioContext;
+  }
+}
+
 export class AudioEngine {
   // El contexto es el "estudio virtual" donde ocurre todo
   private ctx: AudioContext;
@@ -11,7 +18,7 @@ export class AudioEngine {
   constructor() {
     // 1. Creamos el contexto
     // (Usamos window.AudioContext o webkitAudioContext para compatibilidad con Safari)
-    const AudioContextClass = window.AudioContext || (window as any).webkitAudioContext;
+    const AudioContextClass = window.AudioContext || window.webkitAudioContext;
     this.ctx = new AudioContextClass();
 
     // 2. Creamos el canal maestro de volumen
