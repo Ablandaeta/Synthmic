@@ -1,0 +1,64 @@
+/* El lienzo de fondo (la mesa donde está el sinte) */
+.synth-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  width: 100%;
+  padding: 20px;
+  box-sizing: border-box;
+}
+
+/* LA CAJA DEL MONSTRUO (El cuerpo principal) */
+.synth-chassis-box {
+  position: relative;
+  background-color: #3e2723; /* Madera oscura base */
+  /* Si tienes una textura de madera, iría aquí */
+  background-image: linear-gradient(to bottom, rgba(0,0,0,0.2), rgba(0,0,0,0.6));
+  
+  border: 12px solid #2b1d14; /* Marco grueso exterior */
+  border-radius: 20px;         /* Bordes suavizados */
+  padding: 30px;
+  
+  /* Sombra potente para dar sensación de peso y altura */
+  box-shadow: 
+    0 30px 60px rgba(0,0,0,0.8), /* Sombra contra la mesa */
+    inset 0 0 40px rgba(0,0,0,0.8); /* Sombra interna (profundidad) */
+    
+  display: flex;
+  flex-direction: column;
+  gap: 25px; /* Espacio vertical entre las filas del rack */
+  
+  max-width: 900px;
+  width: 100%;
+}
+/* --- FILA SUPERIOR: Header + Master Section --- */
+.synth-top-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-bottom: 20px;
+  border-bottom: 2px groove #2b1d14; /* Línea divisoria grabada en la madera */
+}
+
+.brand-section h1 {
+  margin: 0;
+  font-family: serif; 
+  color: #eecfa1; 
+  letter-spacing: 4px;
+  text-shadow: 0 2px 4px rgba(0,0,0,0.5);
+}
+
+.brand-section small {
+  color: #a1887f;
+  font-family: monospace;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+/* --- FILA INFERIOR: Teclado --- */
+.synth-bottom-row {
+  display: flex;
+  justify-content: center;
+  padding-top: 10px;
+}

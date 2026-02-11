@@ -1,76 +1,16 @@
 .oscillator-panel {
-  background-color: #3e2723; /* Mismo tono oscuro que la encía */
-  padding: 15px;
-  border-radius: 8px;
-  border: 2px solid #1a110d;
-  width: 150px;
+  /* Hacemos que herede el estilo base del módulo si quieres, 
+     o simplemente ajustamos esto: */
+  width: 100%; /* Ancho fijo del módulo */
+  height: 100%; /* Ocupa toda la altura del rack */
   display: flex;
   flex-direction: column;
-  gap: 10px;
-  box-shadow: inset 0 0 10px rgba(0,0,0,0.5);
-}
-
-/* La pantalla de cristal sucio */
-.wave-display {
-  background-color: #1a1a1a;
-  border: 4px solid #5d4037; /* Marco de madera */
-  border-radius: 6px;
-  height: 60px;
-  position: relative;
-  overflow: hidden;
-  box-shadow: 0 0 5px rgba(0,0,0,0.8);
-}
-
-.screen-glass {
-  width: 100%;
-  height: 100%;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  /* Efecto de pantalla CRT vieja */
-  background: radial-gradient(circle, #2c3e50 0%, #000 120%);
-  color: #00ff00; /* Fósforo verde */
-  font-family: monospace;
-  text-shadow: 0 0 5px #00ff00;
-}
-
-.wave-name {
-  text-transform: uppercase;
-  font-size: 10px;
-  margin-bottom: 5px;
-  opacity: 0.8;
+  gap: 2px;
+  /* justify-content: space-between; */
 }
 
 /* Los botones de abajo */
 .wave-selectors {
   display: flex;
   justify-content: space-between;
-}
-
-.wave-selectors button {
-  width: 30px;
-  height: 30px;
-  background-color: #2b1d14;
-  color: #eecfa1;
-  border: 1px solid #5d4037;
-  border-radius: 4px;
-  cursor: pointer;
-  font-family: monospace;
-  font-weight: bold;
-  transition: all 0.1s;
-}
-
-.wave-selectors button:hover {
-  background-color: #5d4037;
-  color: #fff;
-}
-
-/* Botón activo (hundido y brillando) */
-.wave-selectors button.active {
-  background-color: #000;
-  color: #00ff00;
-  border-color: #00ff00;
-  box-shadow: 0 0 5px #00ff00;
-  transform: translateY(1px);
 }

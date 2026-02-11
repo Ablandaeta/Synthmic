@@ -1,0 +1,48 @@
+.module-rack {
+  display: flex;
+  align-items: stretch; /* Todos los módulos tendrán la misma altura */
+  background-color: #1a1a1a; /* Fondo oscuro (el interior del rack) */
+  border: 4px solid #2b1d14; /* Marco interno */
+  border-radius: 6px;
+  height: 220px; /* Altura fija para todos los módulos */
+  overflow-x: auto; /* Si metes muchos efectos, podrás hacer scroll horizontal */
+  box-shadow: inset 0 0 20px rgba(0,0,0,1); /* Sombra interna profunda */
+  
+  /* Esto es clave: Sin espacios entre módulos para que parezca una cadena */
+  gap: 0; 
+  padding: 5px; /* Un pequeño margen interno */
+}
+
+/* ESTILO BASE PARA CUALQUIER MÓDULO (Oscilador, Filtro, etc.) */
+/* Esto asegura que todos parezcan "hermanos" */
+.rack-module {
+  width: 150px; /* Ancho fijo del módulo */
+  border-right: 2px solid #000; /* Separador entre módulos */
+  border-left: 1px solid #3e2723; /* Brillo en el borde */
+  background-color: #2d2d2d; /* Gris oscuro metálico */
+  flex-shrink: 0; /* Que no se aplasten si hay muchos */
+  padding: 10px;
+  position: relative;
+}
+
+/* El espacio vacío (Blank Panel) */
+.rack-blank-space {
+  flex-grow: 1; /* Ocupa todo el resto del espacio */
+  background: repeating-linear-gradient(
+    45deg,
+    #252525,
+    #252525 10px,
+    #2a2a2a 10px,
+    #2a2a2a 20px
+  ); /* Patrón de rejilla o metal rayado */
+  opacity: 0.5;
+  border-left: 2px solid #000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #555;
+  font-family: monospace;
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+}

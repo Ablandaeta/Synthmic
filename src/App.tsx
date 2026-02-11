@@ -1,77 +1,68 @@
-import './App.css'
+import './App.css'; 
 import { useState } from 'react';
-import { synth } from './audio/AudioEngine'; // Importamos la instancia
+import { synth } from '@/audio/AudioEngine';
+import { SynthChassis } from '@/components/layout/SynthChassis';
 import { Keyboard } from '@/components/modules/Keyboard';
 import { Knob } from '@/components/atoms/Knob';
-import { Oscillator } from './components/modules/Oscillator';
+import { Oscillator } from '@/components/modules/Oscillator';
+import { Rack } from './components/layout/Rack/Rack';
 
 function App() {
   
-  // Función para despertar el audio context si está dormido
+  // 1. LÓGICA (Estado y Audio)
+  const [masterVolume, setMasterVolume] = useState(0.3);
+
   const handleWakeUp = () => {
     synth.initialize();
   };
 
-  const [masterVolume, setMasterVolume] = useState(0.3);
-
   const handleVolumeChange = (newVol: number) => {
-    setMasterVolume(newVol); // Actualiza el Ojo visualmente
-    synth.setVolume(newVol); // Actualiza el Audio real
+    setMasterVolume(newVol); 
+    synth.setVolume(newVol); 
   };
 
+  // 2. RENDERIZADO (Composición)
   return (
-    // Agregamos onMouseDown aquí para asegurar que el audio arranque al primer toque
-    <div className="synth-container" onMouseDown={handleWakeUp} onTouchStart={handleWakeUp}>
-      {/* HEADER DEL SINTE */}
-      <div style={{ 
-        display: 'flex', 
-        justifyContent: 'space-between', 
-        alignItems: 'center', 
-        padding: '20px',
-        borderBottom: '4px solid #1a110d',
-        marginBottom: '20px',
-        background: 'rgba(0,0,0,0.2)'
-      }}>
-        <div>
-          <h1 style={{ fontFamily: 'serif', letterSpacing: '5px', margin: 0 }}>SYNTHMIC</h1>
-          <small style={{ color: '#888' }}>The Monster Synth</small>
-        </div>
+    <SynthChassis
+      onWakeUp={handleWakeUp}
+      
+      // SLOT 1: HEADER
+      header={
+        <>
+          <div className="brand-section">
+            <h1 style={{ margin: 0, fontFamily: 'serif', color: '#eecfa1', letterSpacing: '4px' }}>
+              SYNTHMIC
+            </h1>
+            <small style={{ color: '#a1887f', fontFamily: 'monospace' }}>
+              The Monster Synth
+            </small>
+          </div>
+          
+          <div className="master-controls">
+            <Knob 
+              label="Master Vol" 
+              value={masterVolume} 
+              onChange={handleVolumeChange}
+              formatTooltip={(v) => Math.round(v * 100) + '%'}
+            />
+          </div>
+        </>
+      }
 
-        {/* Aquí vive el Ojo Maestro */}
-        <Knob 
-          label="Master Vol" 
-          value={masterVolume} 
-          onChange={handleVolumeChange} 
-          min={0} 
-          max={1} 
-        />
-      </div>
+      // SLOT 2: RACK DE MÓDULOS
+      rack={
+        <Rack>
+          <Oscillator />
+        </Rack>
+             
+      }
 
-      {/* CUERPO PRINCIPAL */}
-      <div style={{ display: 'flex', gap: '20px', justifyContent: 'center', marginBottom: '20px' }}>
-        
-        {/* IZQUIERDA: Módulo de Oscilador */}
-        <Oscillator />
-
-        {/* CENTRO: Espacio vacío por ahora (La pantalla grande del dibujo) */}
-        <div style={{ 
-            width: '300px', 
-            height: '150px', 
-            border: '2px dashed #5d4037', 
-            borderRadius: '10px',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            opacity: 0.5
-        }}>
-           Espacio para Futuros FX
-        </div>
-
-      </div>
-
-      <Keyboard />
-    </div>
-  )
+      // SLOT 3: TECLADO
+      keyboard={
+        <Keyboard />
+      }
+    />
+  );
 }
 
 export default App;
