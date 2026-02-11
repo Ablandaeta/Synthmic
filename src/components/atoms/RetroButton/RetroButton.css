@@ -1,0 +1,29 @@
+.retro-btn {
+  position: relative; /* Necesario para que el tooltip se posicione bien */
+  width: 30px;
+  height: 30px;
+  background-color: #2b1d14;
+  color: #eecfa1;
+  border: 1px solid #5d4037;
+  border-radius: 4px;
+  cursor: pointer;
+  font-family: monospace;
+  font-weight: bold;
+  transition: all 0.1s;
+  
+  /* Evitar selección de texto */
+  user-select: none; 
+}
+
+.retro-btn:hover {
+  background-color: #5d4037;
+  color: #fff;
+}
+
+.retro-btn.active {
+  background-color: #000;
+  color: #00ff00; /* Verde fósforo */
+  border-color: #00ff00;
+  box-shadow: 0 0 5px #00ff00;
+  transform: translateY(1px); /* Efecto de botón hundido */
+}
