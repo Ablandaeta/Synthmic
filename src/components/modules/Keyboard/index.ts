@@ -1,2 +1,1 @@
-import Keyboard from './Keyboard';
-export { Keyboard };
+export * from './Keyboard';

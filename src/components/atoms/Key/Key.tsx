@@ -12,7 +12,7 @@ interface KeyProps {
   onRelease: () => void;            // Función que avisa "me soltaron"
 }
 
-export default function Key({ note, frequency, isBlack = false, onPress, onRelease }: KeyProps) { 
+export const Key = ({ note, frequency, isBlack = false, onPress, onRelease }: KeyProps) => { 
 
   const { isHovered, hoverHandlers } = useHover();
   const [isPressed, setIsPressed] = useState(false);

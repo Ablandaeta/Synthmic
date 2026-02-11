@@ -12,11 +12,11 @@ interface KnobProps {
   formatTooltip?: (val: number) => string
 }
 
-export default function Knob({ 
+export const Knob = ({ 
   label, min = 0, max = 1, value, onChange, 
   // Por defecto, formateamos a porcentaje, pero se puede cambiar desde fuera
   formatTooltip = (v) => `${Math.round(((v - min) / (max - min)) * 100)}%`
-}: KnobProps) {
+}: KnobProps) => {
   
   // 1. Usamos el hook para manejar la lógica de arrastre
   const { handleMouseDown, isDragging } = useDragControl({ 

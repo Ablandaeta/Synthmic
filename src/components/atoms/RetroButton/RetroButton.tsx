@@ -9,7 +9,7 @@ interface RetroButtonProps {
   tooltipText?: string;   // El texto para el tooltip
 }
 
-export function RetroButton({ label, isActive = false, onClick, tooltipText }: RetroButtonProps) {
+export const RetroButton = ({ label, isActive = false, onClick, tooltipText }: RetroButtonProps) => {
   const { isHovered, hoverHandlers } = useHover();
 
   return (

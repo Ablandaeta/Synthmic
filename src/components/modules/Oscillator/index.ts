@@ -1,2 +1,1 @@
-import Oscillator from './Oscillator';
-export { Oscillator };
+export * from './Oscillator';

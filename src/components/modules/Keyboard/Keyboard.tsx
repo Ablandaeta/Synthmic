@@ -3,9 +3,9 @@ import { OCTAVE_4 } from '@/data/note';
 import { synth } from '@/audio/AudioEngine';
 import './Keyboard.css';
 
-export default function Keyboard() {
+export const Keyboard = () => {
 
-  const handlePress = (freq: number) => synth.playTone(freq, 'sawtooth');
+  const handlePress = (freq: number) => synth.playTone(freq);
   const handleRelease = () => synth.stopTone();
 
   // Filtramos solo las blancas para crear la base

@@ -5,7 +5,7 @@ interface TooltipProps {
   isShow: boolean;
 }
 
-export default function Tooltip({ text, isShow }: TooltipProps) {
+export const Tooltip = ({ text, isShow }: TooltipProps) => {
   // Si no hay que mostrarlo, no renderizamos nada (limpieza en el DOM)
   if (!isShow) return null;
 

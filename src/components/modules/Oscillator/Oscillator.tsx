@@ -5,7 +5,7 @@ import './Oscillator.css';
 // Tipos de onda permitidos por Web Audio API
 type WaveType = 'sawtooth' | 'sine' | 'square' | 'triangle';
 
-export default function Oscillator() {
+export const Oscillator = () => {
   const [selectedWave, setSelectedWave] = useState<WaveType>('sawtooth');
 
   const handleWaveChange = (wave: WaveType) => {
