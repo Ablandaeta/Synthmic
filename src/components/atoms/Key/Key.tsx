@@ -1,6 +1,7 @@
 import { Tooltip } from '../Tooltip';
 import { useHover } from '@/hooks/useHover';
 import './Key.css';
+import { useState } from 'react';
 
 // Definimos el "contrato": ¿Qué necesita un diente para existir?
 interface KeyProps {
@@ -11,30 +12,51 @@ interface KeyProps {
   onRelease: () => void;            // Función que avisa "me soltaron"
 }
 
-export default function Key({ note, frequency, isBlack = false, onPress, onRelease }: KeyProps) {
-  
-  // Clase dinámica: Si isBlack es true, añade la clase "black"
-  const className = `key-tooth ${isBlack ? 'black' : ''}`;
+export default function Key({ note, frequency, isBlack = false, onPress, onRelease }: KeyProps) { 
 
   const { isHovered, hoverHandlers } = useHover();
+  const [isPressed, setIsPressed] = useState(false);
 
-  const handleMouseLeave = () => {
-    onRelease();                 // A. Cortamos el sonido
-    hoverHandlers.onMouseLeave(); // B. Ocultamos el tooltip
-  };
+  // Clase dinámica: Si isBlack es true, añade la clase "black"
+  const className = `key-tooth ${isBlack ? 'black' : ''} ${isPressed ? 'pressed' : ''}`;
+
   const handleMouseEnter = (e: React.MouseEvent) => {
-    // A. mostrar el tooltip (si no lo está ya)
+    // A. mostrar el tooltip 
     hoverHandlers.onMouseEnter();
     // B. Si el usuario está arrastrando el mouse con el botón izquierdo apretado, también queremos tocar la nota
     if (e.buttons === 1) {
       onPress(frequency); 
+      setIsPressed(true);
     }
+  };
+
+  const handleMouseLeave = () => {
+    setIsPressed(false);         // resetear el estado de "apretado" 
+    onRelease();                 // Cortamos el sonido
+    hoverHandlers.onMouseLeave(); // Ocultamos el tooltip
   };
 
   // 3. Pequeño ajuste para evitar que se seleccione el texto al arrastrar
   const handleMouseDown = (e: React.MouseEvent) => {
     e.preventDefault(); // Evita comportamientos raros del navegador
+    setIsPressed(true);
     onPress(frequency);
+  };
+
+  const handleMouseUp = () => {
+    setIsPressed(false);
+    onRelease();
+  };
+
+  const handleTouchStart = (e: React.TouchEvent) => {
+     e.preventDefault(); // A veces necesario en móviles para evitar scroll, probar si hace falta
+     setIsPressed(true);
+     onPress(frequency);
+  };
+
+  const handleTouchEnd = () => {
+     setIsPressed(false);
+     onRelease();
   };
 
   return (
@@ -43,11 +65,11 @@ export default function Key({ note, frequency, isBlack = false, onPress, onRelea
       className={className}
       // EVENTOS DE SONIDO (PRESS)
       onMouseDown={handleMouseDown}
-      onTouchStart={() => onPress(frequency)}
+      onTouchStart={handleTouchStart}
       
       // EVENTOS DE SONIDO (RELEASE)
-      onMouseUp={onRelease}
-      onTouchEnd={onRelease}
+      onMouseUp={handleMouseUp}
+      onTouchEnd={handleTouchEnd}
 
       
       // Usamos el handleMouseEnter para detectar si el usuario está arrastrando el mouse mientras lo tiene apretado
