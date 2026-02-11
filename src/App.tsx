@@ -1,8 +1,9 @@
 import './App.css'
+import { useState } from 'react';
+import { synth } from './audio/AudioEngine'; // Importamos la instancia
 import { Keyboard } from '@/components/modules/Keyboard';
 import { Knob } from '@/components/atoms/Knob';
-import { synth } from './audio/AudioEngine'; // Importamos la instancia
-import { useState } from 'react';
+import { Oscillator } from './components/modules/Oscillator';
 
 function App() {
   
@@ -44,6 +45,28 @@ function App() {
           min={0} 
           max={1} 
         />
+      </div>
+
+      {/* CUERPO PRINCIPAL */}
+      <div style={{ display: 'flex', gap: '20px', justifyContent: 'center', marginBottom: '20px' }}>
+        
+        {/* IZQUIERDA: Módulo de Oscilador */}
+        <Oscillator />
+
+        {/* CENTRO: Espacio vacío por ahora (La pantalla grande del dibujo) */}
+        <div style={{ 
+            width: '300px', 
+            height: '150px', 
+            border: '2px dashed #5d4037', 
+            borderRadius: '10px',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            opacity: 0.5
+        }}>
+           Espacio para Futuros FX
+        </div>
+
       </div>
 
       <Keyboard />

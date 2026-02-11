@@ -14,6 +14,9 @@ export class AudioEngine {
   
   // El oscilador actual (la cuerda vocal del monstruo)
   private oscillator: OscillatorNode | null = null;
+  
+  // El tipo de onda actual (sawtooth, sine, square, triangle) por defecto es 'sawtooth'
+  private currentWaveform: OscillatorType = 'sawtooth';
 
   constructor() {
     // 1. Creamos el contexto
@@ -44,8 +47,15 @@ export class AudioEngine {
     // Usamos setTargetAtTime para que el cambio de volumen sea suave y no brusco
     this.masterGain.gain.setTargetAtTime(value, this.ctx.currentTime, 0.01);
   }
+  
+  // cambia el tipo de onda 
+  setWaveform(type: OscillatorType) {
+    this.currentWaveform = type;
+    // Si ya está sonando una nota, podríamos cambiarla en vivo (opcional),
+    // pero por ahora basta con guardar el dato para la PRÓXIMA nota.
+  }
 
-  playTone(frequency: number, waveform: OscillatorType = 'sawtooth') {
+  playTone(frequency: number) {
     // 1. Si ya hay una nota sonando, la detenemos suavemente antes de la nueva
     this.stopTone();
 
@@ -53,7 +63,7 @@ export class AudioEngine {
     this.oscillator = this.ctx.createOscillator();
     
     // 3. Configuramos sus cuerdas vocales
-    this.oscillator.type = waveform; // 'sawtooth', 'sine', 'square', 'triangle'
+    this.oscillator.type = this.currentWaveform; // Usamos el tipo de onda actual
     this.oscillator.frequency.setValueAtTime(frequency, this.ctx.currentTime);
 
     // 4. Conectamos: Oscilador -> Volumen Maestro
