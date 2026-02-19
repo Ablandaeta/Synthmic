@@ -5,12 +5,17 @@
   height: 100%; /* Ocupa toda la altura del rack */
   display: flex;
   flex-direction: column;
-  gap: 2px;
+  gap: 10px;
   /* justify-content: space-between; */
 }
 
 /* Los botones de abajo */
 .wave-selectors {
+  display: flex;
+  justify-content: space-between;
+}
+
+.adsr-section {
   display: flex;
   justify-content: space-between;
 }
