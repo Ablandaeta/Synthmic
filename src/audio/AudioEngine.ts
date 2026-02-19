@@ -1,3 +1,4 @@
+import { Oscillator, type Envelope } from './Oscillator';
 // Extendemos el global Window para incluir webkitAudioContext de Safari
 declare global {
   interface Window {
@@ -6,32 +7,34 @@ declare global {
 }
 
 export class AudioEngine {
-  // El contexto es el "estudio virtual" donde ocurre todo
   private ctx: AudioContext;
-  
-  // El control de volumen maestro (siempre conectado a los altavoces)
   private masterGain: GainNode;
-  
-  // El oscilador actual (la cuerda vocal del monstruo)
-  private oscillator: OscillatorNode | null = null;
-  
+  private activeOscillator: Oscillator | null = null;
+
   // El tipo de onda actual (sawtooth, sine, square, triangle) por defecto es 'sawtooth'
   private currentWaveform: OscillatorType = 'sawtooth';
+  //Estado del Envelope (Valores por defecto)
+  private envelope: Envelope = {
+    attack: 0.01,
+    decay: 0.1,
+    sustain: 0.5, 
+    release: 0.5  
+  };
 
   constructor() {
-    // 1. Creamos el contexto
+    // Creamos el contexto
     // (Usamos window.AudioContext o webkitAudioContext para compatibilidad con Safari)
     const AudioContextClass = window.AudioContext || window.webkitAudioContext;
     this.ctx = new AudioContextClass();
 
-    // 2. Creamos el canal maestro de volumen
+    // Creamos el canal maestro de volumen
     this.masterGain = this.ctx.createGain();
     
-    // 3. Conectamos: Volumen -> Altavoces
+    // Conectamos: Volumen -> Altavoces
     this.masterGain.connect(this.ctx.destination);
     
     // Volumen inicial 
-    this.masterGain.gain.value = 0.3; // 30% para no romper los oídos al principio
+    this.masterGain.gain.value = 0.3; 
   }
 
   // Los navegadores bloquean el audio hasta que el usuario interactúa.
@@ -50,35 +53,27 @@ export class AudioEngine {
   
   // cambia el tipo de onda 
   setWaveform(type: OscillatorType) {
-    this.currentWaveform = type;
-    // Si ya está sonando una nota, podríamos cambiarla en vivo (opcional),
-    // pero por ahora basta con guardar el dato para la PRÓXIMA nota.
+    this.currentWaveform = type;    
+  }
+
+  // Método para cambiar la forma del Envelope
+  setEnvelope(params: Partial<Envelope>) {
+    // Fusionamos los cambios con los valores por defecto
+    this.envelope = { ...this.envelope, ...params };
   }
 
   playTone(frequency: number) {
-    // 1. Si ya hay una nota sonando, la detenemos suavemente antes de la nueva
-    this.stopTone();
-
-    // 2. Creamos un nuevo oscilador
-    this.oscillator = this.ctx.createOscillator();
+    if (this.activeOscillator) {
+      this.activeOscillator.stop();
+    }
+    this.activeOscillator = new Oscillator(this.ctx, this.currentWaveform, frequency, 0, this.envelope, this.masterGain);
     
-    // 3. Configuramos sus cuerdas vocales
-    this.oscillator.type = this.currentWaveform; // Usamos el tipo de onda actual
-    this.oscillator.frequency.setValueAtTime(frequency, this.ctx.currentTime);
-
-    // 4. Conectamos: Oscilador -> Volumen Maestro
-    this.oscillator.connect(this.masterGain);
-
-    // 5. ¡GRITA!
-    this.oscillator.start();
   }
 
   stopTone() {
-    if (this.oscillator) {
-      // Detenemos el oscilador
-      this.oscillator.stop();
-      this.oscillator.disconnect();
-      this.oscillator = null;
+    if (this.activeOscillator) {
+      this.activeOscillator.stop();
+      this.activeOscillator = null;
     }
   }
 }
