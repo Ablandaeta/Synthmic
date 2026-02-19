@@ -56,8 +56,7 @@ constructor(AudioContext: AudioContext, WaveType: OscillatorType, Frequency: num
     // Metodo para detener y la fase de Release
     stop(){
         const now = this.ctx.currentTime;
-        console.log("now", now);
-        
+                
         const { release } = this.envelope;
         const currentGain = this.envGain.gain.value;
 
@@ -70,8 +69,7 @@ constructor(AudioContext: AudioContext, WaveType: OscillatorType, Frequency: num
         setTimeout(() => {
             this.osc.stop();
             this.osc.disconnect();
-            this.envGain.disconnect();
-            console.log("Oscillator stopped", this.ctx.currentTime, this.ctx.currentTime - now);
+            this.envGain.disconnect();            
         }, (safeRelease * 2 + 2) *1000); 
     }
     
