@@ -10,12 +10,18 @@ interface KnobProps {
   value: number;
   onChange: (value: number) => void;
   formatTooltip?: (val: number) => string
+  size?: number
+}
+
+interface CustomCSS extends React.CSSProperties {
+  '--knob-size'?: string;
 }
 
 export const Knob = ({ 
   label, min = 0, max = 1, value, onChange, 
   // Por defecto, formateamos a porcentaje, pero se puede cambiar desde fuera
-  formatTooltip = (v) => `${Math.round(((v - min) / (max - min)) * 100)}%`
+  formatTooltip = (v) => `${Math.round(((v - min) / (max - min)) * 100)}%`,
+  size = 80 
 }: KnobProps) => {
   
   // 1. Usamos el hook para manejar la lógica de arrastre
@@ -34,10 +40,13 @@ export const Knob = ({
   
   return (
     <div className="knob-socket"
-    {...hoverHandlers}>
+    {...hoverHandlers}
+    style={{'--knob-size': `${size}px` } as CustomCSS}
+    >
         <Tooltip 
         text={formatTooltip(value)} 
         isShow={isDragging || isHovered} 
+        
       />
       <div 
         className="knob-eyeball" 

@@ -1,29 +1,31 @@
 /* La cuenca del ojo (El marco fijo) */
 .knob-socket {
+  --knob-size: 80px;
+
   position: relative;
-  width: 80px;
-  height: 80px;
+  width: var(--knob-size);
+  aspect-ratio: 1 / 1;
   background-color: #3e2723; /* Carne oscura */
   border-radius: 50%;
   box-shadow: 
-    inset 2px 2px 5px rgba(0,0,0,0.7), /* Profundidad */
-    0 0 0 4px #2b1d14, /* Borde de piel */
-    0 0 10px rgba(0,0,0,0.5);
+    inset calc(var(--knob-size)*0.025) calc(var(--knob-size)*0.025) calc(var(--knob-size)*0.062) rgba(0,0,0,0.7), /* Profundidad */
+    0 0 0 calc(var(--knob-size)*0.05) #2b1d14, /* Borde de piel */
+    0 0 0 calc(var(--knob-size)*0.09) rgba(0,0,0,0.5);
   display: flex;
   justify-content: center;
   align-items: center;
-  margin: 10px;
+  margin: calc(var(--knob-size)*0.1);
 }
 
 /* El globo ocular (La parte que gira) */
 .knob-eyeball {
-  width: 60px;
-  height: 60px;
+  width: 80%;
+  aspect-ratio: 1.03 / 1;
   background: radial-gradient(circle at 30% 30%, #fff 0%, #eecfa1 60%, #dba675 100%); /* Efecto 3D esférico */
   border-radius: 50%;
   position: relative;
   cursor: ns-resize; /* Cursor de "arriba-abajo" */
-  box-shadow: 0 0 5px rgba(0,0,0,0.5);
+  box-shadow: 0 0 calc(var(--knob-size)*0.062) rgba(0,0,0,0.5);
 }
 
 /* El Iris (El color del ojo) */
@@ -32,8 +34,8 @@
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  width: 25px;
-  height: 25px;
+  width: 42%;
+  aspect-ratio: 1 / 1.1;  
   background: radial-gradient(circle, #4caf50 0%, #1b5e20 100%); /* Verde reptil */
   border-radius: 50%;
   border: 1px solid #1b5e20;
@@ -44,9 +46,9 @@
   position: absolute;
   top: 50%;
   left: 50%;
-  transform: translate(-50%, -50%);
-  width: 3px; /* Pupila de gato */
-  height: 20px;
+  transform: translate(-50%, -50%);  
+  height: 80%;
+  aspect-ratio: 1 / 6;  
   background-color: #000;
   border-radius: 50%;
 }
@@ -54,10 +56,10 @@
 /* Un brillo para darle vida (reflejo) */
 .knob-glint {
   position: absolute;
-  top: 15px;
-  left: 15px;
-  width: 8px;
-  height: 8px;
+  top: 20%;
+  left: 33%;
+  height: 15%;
+  aspect-ratio: 1 / 1.3 ;
   background-color: white;
   border-radius: 50%;
   opacity: 0.8;
@@ -67,10 +69,10 @@
 /* Etiqueta debajo */
 .knob-label {
   position: absolute;
-  bottom: -25px;
+  bottom: -1.5em;
   width: 100%;
   text-align: center;
-  font-size: 12px;
+  font-size: 1em;
   color: var(--color-foreground);
   font-family: monospace;
   text-transform: uppercase;
