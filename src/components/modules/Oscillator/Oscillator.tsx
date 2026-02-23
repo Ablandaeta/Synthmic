@@ -1,49 +1,55 @@
 import './Oscillator.css';
 import { useState } from 'react';
-import { synth } from '@/audio/AudioEngine';
+import { useSynth } from '@/hooks';
+
 import { RetroButton } from '@/components/atoms/RetroButton/RetroButton';
 import { RetroDisplay } from '@/components/atoms/RetroDisplay/RetroDisplay';
 import { Knob } from '@/components/atoms/Knob/Knob';
 
-// Tipos de onda permitidos por Web Audio API
-type WaveType = 'sawtooth' | 'sine' | 'square' | 'triangle';
-type ADSRKey = 'a'|'d'|'s'|'r';
+import { type Envelope } from '@/audio/Oscillator';
 
-const WAVE_BTNS: Array<{ type: WaveType; label: string; tooltip: string }> = [
+const WAVE_BTNS: Array<{ type: OscillatorType; label: string; tooltip: string }> = [
   { type: 'sine', label: '~', tooltip: 'Sine Wave' },
   { type: 'square', label: '∏', tooltip: 'Square Wave' },
   { type: 'sawtooth', label: 'N', tooltip: 'Sawtooth Wave' },
   { type: 'triangle', label: 'Λ', tooltip: 'Triangle Wave' },
 ];
 
-const ADSR_CONFIG: Array<{ min: number; max: number; label: string; key: ADSRKey }> = [
-  { min: 0.01, max: 2, label: 'A', key: 'a' },
-  { min: 0.01, max: 2, label: 'D', key: 'd' },
-  { min: 0.01, max: 1, label: 'S', key: 's' },
-  { min: 0.01, max: 2, label: 'R', key: 'r' },
+const ADSR_CONFIG: Array<{ min: number; max: number; label: string; key: keyof Envelope }> = [
+  { min: 0.01, max: 2, label: 'A', key: 'attack' },
+  { min: 0.01, max: 2, label: 'D', key: 'decay' },
+  { min: 0.01, max: 1, label: 'S', key: 'sustain' },
+  { min: 0.01, max: 2, label: 'R', key: 'release' },
 ];
 
 export const Oscillator = () => {
-  const [selectedWave, setSelectedWave] = useState<WaveType>('sawtooth');
+  const synth = useSynth();
+  const [selectedWave, setSelectedWave] = useState<OscillatorType>(synth.waveform);
 
-  const [adsr, setAdsr] = useState({ a: 0.01, d: 0.1, s: 0.5, r: 0.5 });
+  const [envelope, setEnvelope] = useState<Envelope>(synth.envelope);
+  const [polyphony, setPolyphony] = useState<number>(synth.polyphony);
 
-  const handleWaveChange = (wave: WaveType) => {
+  const handleWaveChange = (wave: OscillatorType) => {
     setSelectedWave(wave);
     synth.setWaveform(wave); // Comunicamos al motor de audio
   };
 
-  const updateAdsr = (key: ADSRKey, val: number) => {
-    const newAdsr = { ...adsr, [key]: val };
-    setAdsr(newAdsr);
+  const updateEnvelope = (key: keyof Envelope, val: number) => {
+    const newEnvelope = { ...envelope, [key]: val };
+    setEnvelope(newEnvelope);
     
     // Mapeamos las letras a los nombres reales del engine
     synth.setEnvelope({
-        attack: newAdsr.a,
-        decay: newAdsr.d,
-        sustain: newAdsr.s,
-        release: newAdsr.r
+        attack: newEnvelope.attack,
+        decay: newEnvelope.decay,
+        sustain: newEnvelope.sustain,
+        release: newEnvelope.release
     });
+  };
+
+  const updatePolyphony = (polyphony: number) => {
+    setPolyphony(polyphony);
+    synth.setPolyphony(polyphony);
   };
 
   return (
@@ -57,7 +63,7 @@ export const Oscillator = () => {
       </RetroDisplay>
 
       {/* SELECTORES DE ONDA */}
-      <div className="wave-selectors">
+      <div className="oscillator-section">
         {WAVE_BTNS.map(({ type, label, tooltip }) => (
             <RetroButton 
                 key={type}
@@ -70,18 +76,30 @@ export const Oscillator = () => {
       </div>
 
       {/* CONTROLES DE ENVELOPE (ADSR) */}
-      <div className="adsr-section">
+      <div className="oscillator-section">
         {ADSR_CONFIG.map(({min, max, label, key}) => (
             <Knob 
             label={label}
             min={min}
             max={max}
-            value={adsr[key]}
-            onChange={(v) => updateAdsr(key, v)}
+            value={envelope[key]}
+            onChange={(v) => updateEnvelope(key, v)}
             formatTooltip={label !== 'S' ? (v) => `${v.toFixed(2)}s` : undefined}
             size={25}
         />
        ))}
+      </div>
+
+      <div className="oscillator-section">
+        <Knob 
+            label="Poly"
+            min={1}
+            max={16}
+            value={polyphony}
+            onChange={(v) => updatePolyphony(v)}
+            formatTooltip={(v) => `${Math.round(v)} voices`}
+            size={25}
+        />
       </div>
     </div>
   );

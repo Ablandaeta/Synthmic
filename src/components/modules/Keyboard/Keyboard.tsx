@@ -1,12 +1,12 @@
 import { Key } from '@/components/atoms/Key';
 import { OCTAVE_4 } from '@/data/note';
-import { synth } from '@/audio/AudioEngine';
+import { useSynth } from '@/hooks';
 import './Keyboard.css';
 
 export const Keyboard = () => {
-
+  const synth = useSynth();
   const handlePress = (freq: number) => synth.playTone(freq);
-  const handleRelease = () => synth.stopTone();
+  const handleRelease = (freq: number) => synth.stopTone(freq);
 
   // Filtramos solo las blancas para crear la base
   const whiteKeys = OCTAVE_4.filter(key => !key.isBlack);

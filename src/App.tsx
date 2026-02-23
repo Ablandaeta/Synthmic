@@ -1,16 +1,16 @@
 import './App.css'; 
 import { useState } from 'react';
-import { synth } from '@/audio/AudioEngine';
+import { useSynth } from '@/hooks';
 import { SynthChassis } from '@/components/layout/SynthChassis';
 import { Keyboard } from '@/components/modules/Keyboard';
 import { Knob } from '@/components/atoms/Knob';
 import { Oscillator } from '@/components/modules/Oscillator';
-import { Rack } from './components/layout/Rack/Rack';
+import { Rack } from '@/components/layout/Rack/Rack';
 
-function App() {
-  
-  // 1. LÓGICA (Estado y Audio)
-  const [masterVolume, setMasterVolume] = useState(0.3);
+function App() {  
+  // LÓGICA (Estado y Audio)
+  const synth = useSynth();
+  const [masterVolume, setMasterVolume] = useState(synth.volume);
 
   const handleWakeUp = () => {
     synth.initialize();
@@ -21,7 +21,7 @@ function App() {
     synth.setVolume(newVol); 
   };
 
-  // 2. RENDERIZADO (Composición)
+  // RENDERIZADO (Composición)
   return (
     <SynthChassis
       onWakeUp={handleWakeUp}

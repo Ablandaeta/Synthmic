@@ -1,5 +1,5 @@
 import { Tooltip } from '../Tooltip';
-import { useHover } from '@/hooks/useHover';
+import { useHover } from '@/hooks';
 import './Key.css';
 import { useState } from 'react';
 
@@ -9,7 +9,7 @@ interface KeyProps {
   frequency: number;    // Ej: 261.63
   isBlack?: boolean;    // ¿Es tecla negra? (Opcional, por defecto false)
   onPress: (freq: number) => void;  // Función que avisa "me están apretando"
-  onRelease: () => void;            // Función que avisa "me soltaron"
+  onRelease: (freq: number) => void;            // Función que avisa "me soltaron"
 }
 
 export const Key = ({ note, frequency, isBlack = false, onPress, onRelease }: KeyProps) => { 
@@ -32,7 +32,7 @@ export const Key = ({ note, frequency, isBlack = false, onPress, onRelease }: Ke
 
   const handleMouseLeave = () => {
     setIsPressed(false);         // resetear el estado de "apretado" 
-    onRelease();                 // Cortamos el sonido
+    onRelease(frequency);                 // Cortamos el sonido
     hoverHandlers.onMouseLeave(); // Ocultamos el tooltip
   };
 
@@ -45,7 +45,7 @@ export const Key = ({ note, frequency, isBlack = false, onPress, onRelease }: Ke
 
   const handleMouseUp = () => {
     setIsPressed(false);
-    onRelease();
+    onRelease(frequency);
   };
 
   const handleTouchStart = (e: React.TouchEvent) => {
@@ -56,7 +56,7 @@ export const Key = ({ note, frequency, isBlack = false, onPress, onRelease }: Ke
 
   const handleTouchEnd = () => {
      setIsPressed(false);
-     onRelease();
+     onRelease(frequency);
   };
 
   return (

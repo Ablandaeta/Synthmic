@@ -1,7 +1,8 @@
+import './index.css' 
 import React from 'react'
 import ReactDOM from 'react-dom/client'
 import App from './App.tsx'
-import './index.css' 
+import { SynthProvider } from './context/SynthProvider'
 
 // 1. Buscamos el elemento 'root' en el HTML
 const rootElement = document.getElementById('root')
@@ -10,7 +11,9 @@ const rootElement = document.getElementById('root')
 if (rootElement) {
   ReactDOM.createRoot(rootElement).render(
     <React.StrictMode>
-      <App />
+      <SynthProvider>
+        <App />
+      </SynthProvider>
     </React.StrictMode>,
   )
 }

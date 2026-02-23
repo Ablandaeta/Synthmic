@@ -7,17 +7,21 @@ declare global {
 }
 
 export class AudioEngine {
+  // Contexto de audio
   private ctx: AudioContext;
+  // Canal maestro de volumen
   private masterGain: GainNode;
-  private activeOscillator: Oscillator | null = null;
-
+  // Map para guardar los osciladores activos
+  private activeOscillators: Map<number, Oscillator> = new Map();  
+  // polifonia
+  private currentPolyphony: number = 10;
   // El tipo de onda actual (sawtooth, sine, square, triangle) por defecto es 'sawtooth'
-  private currentWaveform: OscillatorType = 'sawtooth';
+  private currentWaveform: OscillatorType = 'triangle';
   //Estado del Envelope (Valores por defecto)
-  private envelope: Envelope = {
+  private currentEnvelope: Envelope = {
     attack: 0.01,
     decay: 0.1,
-    sustain: 0.5, 
+    sustain: 0.90, 
     release: 0.5  
   };
 
@@ -44,40 +48,77 @@ export class AudioEngine {
       await this.ctx.resume();
     }
   }
+  
+  // GETTERS
+  get waveform() {
+    return this.currentWaveform;
+  }
+  get envelope() {
+    return this.currentEnvelope;
+  }
+  get polyphony() {
+    return this.currentPolyphony;
+  }
+  get volume() {
+    return this.masterGain.gain.value;
+  }
 
+  // METHODS
+  // Método para cambiar el volumen
   setVolume(value: number) {
     // value debe ser entre 0 y 1
     // Usamos setTargetAtTime para que el cambio de volumen sea suave y no brusco
     this.masterGain.gain.setTargetAtTime(value, this.ctx.currentTime, 0.01);
   }
   
-  // cambia el tipo de onda 
+  // Método para cambiar el tipo de onda 
   setWaveform(type: OscillatorType) {
     this.currentWaveform = type;    
   }
 
   // Método para cambiar la forma del Envelope
   setEnvelope(params: Partial<Envelope>) {
-    // Fusionamos los cambios con los valores por defecto
-    this.envelope = { ...this.envelope, ...params };
+    // Fusionamos los cambios con los valores actuales
+    this.currentEnvelope = { ...this.currentEnvelope, ...params };
   }
 
-  playTone(frequency: number) {
-    if (this.activeOscillator) {
-      this.activeOscillator.stop();
+  // Método para cambiar la polifonia
+  setPolyphony(polyphony: number) {
+    this.currentPolyphony = Math.max(1, Math.min(polyphony, 16));
+    while(this.activeOscillators.size> this.currentPolyphony){
+      this.stopOldestOscillator();
     }
-    this.activeOscillator = new Oscillator(this.ctx, this.currentWaveform, frequency, 0, this.envelope, this.masterGain);
+  }  
+
+  // Método para tocar una nota
+  playTone(frequency: number) {
+    // Si ya está sonando, la paramos
+    if (this.activeOscillators.has(frequency)) {
+      this.activeOscillators.get(frequency)?.stop();
+    }
+    // Si se supera la polifonia, eliminamos la más vieja
+    if (this.activeOscillators.size >= this.polyphony) {
+      this.stopOldestOscillator();
+    }
+    // Creamos un nuevo oscilador
+    const newOsc = new Oscillator(this.ctx, this.currentWaveform, frequency, 0, this.currentEnvelope, this.masterGain);
+    this.activeOscillators.set(frequency, newOsc);
     
   }
 
-  stopTone() {
-    if (this.activeOscillator) {
-      this.activeOscillator.stop();
-      this.activeOscillator = null;
+  // Método para detener una nota
+  stopTone(frequency: number) {
+    const osc = this.activeOscillators.get(frequency);
+    if (osc) {
+      osc.stop();
+      this.activeOscillators.delete(frequency);
+    }
+  }
+
+  private stopOldestOscillator() {
+    const firstKey = this.activeOscillators.keys().next().value;
+    if (firstKey !== undefined) {
+      this.stopTone(firstKey);
     }
   }
 }
-
-// Exportamos UNA sola instancia (Singleton) para toda la app.
-// Así, no importa cuántas teclas toques, todas usan el mismo "cerebro".
-export const synth = new AudioEngine();

@@ -8,14 +8,7 @@
   gap: 10px;
   /* justify-content: space-between; */
 }
-
-/* Los botones de abajo */
-.wave-selectors {
-  display: flex;
-  justify-content: space-between;
-}
-
-.adsr-section {
+.oscillator-section {
   display: flex;
   justify-content: space-between;
 }

@@ -1,6 +1,5 @@
 import './Knob.css';
-import { useDragControl } from '@/hooks/useDragControl';
-import { useHover } from '@/hooks/useHover'; 
+import { useDragControl, useHover } from '@/hooks';
 import { Tooltip } from '@/components/atoms/Tooltip'; 
 
 interface KnobProps {
@@ -24,17 +23,17 @@ export const Knob = ({
   size = 80 
 }: KnobProps) => {
   
-  // 1. Usamos el hook para manejar la lógica de arrastre
+  // Usamos el hook para manejar la lógica de arrastre
   const { handleMouseDown, isDragging } = useDragControl({ 
     value, 
     onChange, 
     min, 
     max 
   });
-  // 2. Usamos el hook para manejar el hover (para mostrar el tooltip)
+  // Usamos el hook para manejar el hover (para mostrar el tooltip)
   const { isHovered, hoverHandlers } = useHover();
 
-  // 3. Solo calculamos lo visual (Grados)
+  // Solo calculamos lo visual (Grados)
   const percentage = (value - min) / (max - min);
   const rotation = -135 + (percentage * 270);
   
