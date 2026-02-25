@@ -1,4 +1,5 @@
 import { Oscillator, type Envelope } from './Oscillator';
+import { LFO } from './LFO';
 // Extendemos el global Window para incluir webkitAudioContext de Safari
 declare global {
   interface Window {
@@ -26,6 +27,7 @@ export class AudioEngine {
     sustain: 0.9,
     release: 0.5,
   };
+  private globalLFO: LFO | null = null;
 
   constructor() {
     // Creamos el contexto
@@ -48,6 +50,10 @@ export class AudioEngine {
   async initialize() {
     if (this.ctx.state === 'suspended') {
       await this.ctx.resume();
+    }
+    if(!this.globalLFO){
+      this.globalLFO = new LFO(this.ctx, 'sine', 5);
+      this.globalLFO.start();
     }
   }
 
@@ -104,6 +110,14 @@ export class AudioEngine {
     });
   }
 
+  setModulation(value: number) {
+    if (!this.globalLFO) return;
+
+    // Rueda va de 0 a 100. Mapeamos a 0-50 cents de vibrato.
+    const depth = (value / 100) * 50; 
+    this.globalLFO.setDepth(depth);
+  }
+
   // Método para tocar una nota
   playTone(frequency: number) {
     // Si ya está sonando, la paramos
@@ -122,6 +136,7 @@ export class AudioEngine {
       this.currentDetune,
       this.currentEnvelope,
       this.masterGain,
+      this.globalLFO || undefined
     );
     this.activeOscillators.set(frequency, newOsc);
   }
