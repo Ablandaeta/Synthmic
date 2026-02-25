@@ -1,6 +1,6 @@
-import { Tooltip } from '../Tooltip';
-import { useHover } from '@/hooks';
 import './Key.css';
+import { Tooltip } from '@/components/atoms/Tooltip';
+import { useHover } from '@/hooks';
 import { useState } from 'react';
 
 // Definimos el "contrato": ¿Qué necesita un diente para existir?

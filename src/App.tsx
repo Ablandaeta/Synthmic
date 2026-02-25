@@ -6,6 +6,7 @@ import { Keyboard } from '@/components/modules/Keyboard';
 import { Knob } from '@/components/atoms/Knob';
 import { Oscillator } from '@/components/modules/Oscillator';
 import { Rack } from '@/components/layout/Rack/Rack';
+import { Wheels } from '@/components/modules/Wheels';
 
 function App() {  
   // LÓGICA (Estado y Audio)
@@ -30,10 +31,10 @@ function App() {
       header={
         <>
           <div className="brand-section">
-            <h1 style={{ margin: 0, fontFamily: 'serif', color: '#eecfa1', letterSpacing: '4px' }}>
+            <h1>
               SYNTHMIC
             </h1>
-            <small style={{ color: '#a1887f', fontFamily: 'monospace' }}>
+            <small>
               The Monster Synth
             </small>
           </div>
@@ -59,7 +60,11 @@ function App() {
 
       // SLOT 3: TECLADO
       keyboard={
+        <>
+
+        <Wheels />
         <Keyboard />
+        </>
       }
     />
   );

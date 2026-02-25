@@ -1,5 +1,5 @@
+import "./SynthChassis.css";
 import type { ReactNode } from "react";
-import "./SynthChassis.css"; // Moveremos el CSS aquí
 
 interface SynthChassisProps {
   header: ReactNode; // Slot para el logo y volumen

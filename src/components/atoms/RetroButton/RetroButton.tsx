@@ -1,10 +1,10 @@
-import './RetroButton.css'; // Crearemos su CSS específico
+import './RetroButton.css';
 import { Tooltip } from '@/components/atoms/Tooltip';
 import { useHover } from '@/hooks/useHover';
 
 interface RetroButtonProps {
-  label: string;          // El icono o texto del botón (~, N, etc)
-  isActive?: boolean;     // ¿Está hundido/encendido?
+  label: string;          // El icono o texto del botón
+  isActive?: boolean;
   onClick: () => void;
   tooltipText?: string;   // El texto para el tooltip
 }

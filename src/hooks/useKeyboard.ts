@@ -7,9 +7,13 @@ export function useComputerKeyboard(
 ) {
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
-      // Ignorar si el usuario está escribiendo en un input o textarea
+      // Ignorar si el usuario está escribiendo en áreas de texto o inputs genéricos
       const target = e.target as HTMLElement;
-      if (target.tagName === 'INPUT' || target.tagName === 'TEXTAREA' || target.isContentEditable) {
+      if (
+        target instanceof HTMLTextAreaElement || 
+        target.isContentEditable ||
+        (target instanceof HTMLInputElement && target.type !== 'range')
+      ) {
         return;
       }
 

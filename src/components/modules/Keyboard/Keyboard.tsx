@@ -1,8 +1,8 @@
+import './Keyboard.css';
 import { useState, useMemo, useCallback } from 'react';
 import { Key } from '@/components/atoms/Key';
 import { getOctaveNotes, COMPUTER_KEY_MAP } from '@/data/note';
 import { useSynth, useComputerKeyboard } from '@/hooks';
-import './Keyboard.css';
 
 interface KeyboardProps {
   octave?: number;

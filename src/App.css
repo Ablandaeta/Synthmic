@@ -1,0 +1,12 @@
+.brand-section{
+   h1{
+    margin: 0;
+    font-family: 'Monospace', monospace;
+    color: #eecfa1;
+    letter-spacing: 4px;
+   } 
+   small{
+    color: #a1887f;
+    font-family: 'Monospace', monospace;
+   }
+}
