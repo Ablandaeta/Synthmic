@@ -1,12 +1,16 @@
-.brand-section{
-   h1{
+.brand-section {
+  h1 {
     margin: 0;
-    font-family: 'Monospace', monospace;
+    font-family: "Monospace", monospace;
     color: #eecfa1;
     letter-spacing: 4px;
-   } 
-   small{
+  }
+  small {
     color: #a1887f;
-    font-family: 'Monospace', monospace;
-   }
+    font-family: "Monospace", monospace;
+  }
+}
+.master-controls {
+  display: flex;
+  gap: 10px;
 }
