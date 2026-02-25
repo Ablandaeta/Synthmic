@@ -73,4 +73,8 @@ constructor(AudioContext: AudioContext, WaveType: OscillatorType, Frequency: num
         }, (safeRelease * 2 + 2) *1000); 
     }
     
+    setDetune(cents: number) {
+        const now = this.ctx.currentTime;
+        this.osc.detune.setTargetAtTime(cents, now, 0.02);
+    }
 }

@@ -12,17 +12,19 @@ export class AudioEngine {
   // Canal maestro de volumen
   private masterGain: GainNode;
   // Map para guardar los osciladores activos
-  private activeOscillators: Map<number, Oscillator> = new Map();  
-  // polifonia
+  private activeOscillators: Map<number, Oscillator> = new Map();
+  // Polifonia
   private currentPolyphony: number = 10;
-  // El tipo de onda actual (sawtooth, sine, square, triangle) por defecto es 'sawtooth'
+  // Detune
+  private currentDetune: number = 0;
+  // El tipo de onda actual (sawtooth, sine, square, triangle)
   private currentWaveform: OscillatorType = 'triangle';
   //Estado del Envelope (Valores por defecto)
   private currentEnvelope: Envelope = {
     attack: 0.01,
     decay: 0.1,
-    sustain: 0.90, 
-    release: 0.5  
+    sustain: 0.9,
+    release: 0.5,
   };
 
   constructor() {
@@ -33,12 +35,12 @@ export class AudioEngine {
 
     // Creamos el canal maestro de volumen
     this.masterGain = this.ctx.createGain();
-    
+
     // Conectamos: Volumen -> Altavoces
     this.masterGain.connect(this.ctx.destination);
-    
-    // Volumen inicial 
-    this.masterGain.gain.value = 0.3; 
+
+    // Volumen inicial
+    this.masterGain.gain.value = 0.3;
   }
 
   // Los navegadores bloquean el audio hasta que el usuario interactúa.
@@ -48,7 +50,7 @@ export class AudioEngine {
       await this.ctx.resume();
     }
   }
-  
+
   // GETTERS
   get waveform() {
     return this.currentWaveform;
@@ -59,9 +61,12 @@ export class AudioEngine {
   get polyphony() {
     return this.currentPolyphony;
   }
+  get detune() {
+    return this.currentDetune;
+  }
   get volume() {
     return this.masterGain.gain.value;
-  }
+  }  
 
   // METHODS
   // Método para cambiar el volumen
@@ -70,10 +75,10 @@ export class AudioEngine {
     // Usamos setTargetAtTime para que el cambio de volumen sea suave y no brusco
     this.masterGain.gain.setTargetAtTime(value, this.ctx.currentTime, 0.01);
   }
-  
-  // Método para cambiar el tipo de onda 
+
+  // Método para cambiar el tipo de onda
   setWaveform(type: OscillatorType) {
-    this.currentWaveform = type;    
+    this.currentWaveform = type;
   }
 
   // Método para cambiar la forma del Envelope
@@ -85,10 +90,19 @@ export class AudioEngine {
   // Método para cambiar la polifonia
   setPolyphony(polyphony: number) {
     this.currentPolyphony = Math.max(1, Math.min(polyphony, 16));
-    while(this.activeOscillators.size> this.currentPolyphony){
+    while (this.activeOscillators.size > this.currentPolyphony) {
       this.stopOldestOscillator();
     }
-  }  
+  }
+
+  // Método para cambiar el detune
+  setPitchBend(cents: number) {
+    this.currentDetune = cents;
+    // Actualizamos todos los osciladores activos inmediatamente
+    this.activeOscillators.forEach((osc) => {
+      osc.setDetune(cents);
+    });
+  }
 
   // Método para tocar una nota
   playTone(frequency: number) {
@@ -101,9 +115,15 @@ export class AudioEngine {
       this.stopOldestOscillator();
     }
     // Creamos un nuevo oscilador
-    const newOsc = new Oscillator(this.ctx, this.currentWaveform, frequency, 0, this.currentEnvelope, this.masterGain);
+    const newOsc = new Oscillator(
+      this.ctx,
+      this.currentWaveform,
+      frequency,
+      this.currentDetune,
+      this.currentEnvelope,
+      this.masterGain,
+    );
     this.activeOscillators.set(frequency, newOsc);
-    
   }
 
   // Método para detener una nota
