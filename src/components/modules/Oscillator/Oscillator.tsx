@@ -82,6 +82,7 @@ export const Oscillator = () => {
       <div className="oscillator-section">
         {ADSR_CONFIG.map(({ min, max, label, key }) => (
           <Knob
+            key={key}
             label={label}
             min={min}
             max={max}

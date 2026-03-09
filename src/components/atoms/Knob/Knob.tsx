@@ -51,6 +51,11 @@ export const Knob = ({
         className="knob-eyeball" 
         onMouseDown={handleMouseDown} // Conectamos el evento del hook aquí
         style={{transform:`rotate(${rotation}deg)`}}
+        aria-label={label}
+        role="slider"
+        aria-valuemin={min}
+        aria-valuemax={max}
+        aria-valuenow={value}
       >
         <div 
             className="knob-iris"
