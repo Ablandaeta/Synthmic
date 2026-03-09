@@ -14,7 +14,7 @@ let keyReleaseCallback: ((key: string) => void) | undefined;
 
 vi.mock("@/hooks", () => ({
   useSynth: () => mockSynth,
-  useComputerKeyboard: (onPress: (key: string) => void, onRelease: (key: string) => void) => {
+  useKeyboard: (onPress: (key: string) => void, onRelease: (key: string) => void) => {
     keyPressCallback = onPress;
     keyReleaseCallback = onRelease;
   },
@@ -71,7 +71,7 @@ describe("<Keyboard />", () => {
   it("debería responder a eventos del teclado de la computadora", async () => {
     render(<Keyboard />);
     
-    // Disparamos el callback que el hook useComputerKeyboard habría registrado
+    // Disparamos el callback que el hook useKeyboard habría registrado
     if (keyPressCallback) {
         const onPress = keyPressCallback;
         await act(async () => {

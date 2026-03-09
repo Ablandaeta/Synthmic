@@ -1,7 +1,7 @@
 // src/hooks/useComputerKeyboard.ts
 import { useEffect } from 'react';
 
-export function useComputerKeyboard(
+export function useKeyboard(
   onKeyPress: (key: string) => void, 
   onKeyRelease: (key: string) => void
 ) {

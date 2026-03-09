@@ -1,44 +1,41 @@
 import { renderHook, act } from '@testing-library/react';
-import { describe, it, expect } from 'vitest';
-import { useHover } from './useHover.ts';
+import { describe, it, expect, vi, afterEach } from 'vitest';
+import { useHover } from './useHover';
 
 describe('Hook: useHover', () => {
-  
-  it('debería inicializarse en false', () => {
-    // Renderizamos el hook en el vacío
+  afterEach(() => {
+    vi.clearAllMocks();
+  });
+
+  it('debería inicializarse con isHovered en false', () => {
     const { result } = renderHook(() => useHover());
 
-    // Comprobamos su valor inicial
     expect(result.current.isHovered).toBe(false);
   });
 
-  it('debería cambiar a true cuando el mouse entra', () => {
+  it('debería cambiar isHovered a true cuando se dispara onMouseEnter', () => {
     const { result } = renderHook(() => useHover());
 
-    // Simulamos la acción del usuario usando 'act'
     act(() => {
       result.current.hoverHandlers.onMouseEnter();
     });
 
-    // Comprobamos que el estado se actualizó
     expect(result.current.isHovered).toBe(true);
   });
 
-  it('debería volver a false cuando el mouse sale', () => {
+  it('debería cambiar isHovered a false cuando se dispara onMouseLeave', () => {
     const { result } = renderHook(() => useHover());
-
-    // Entramos...
+    
+    // Preparar estado inicial (hover true)
     act(() => {
       result.current.hoverHandlers.onMouseEnter();
     });
-    
-    // Y salimos
+    expect(result.current.isHovered).toBe(true);
+
     act(() => {
       result.current.hoverHandlers.onMouseLeave();
     });
 
-    // Comprobamos que volvió a su estado original
     expect(result.current.isHovered).toBe(false);
   });
-
 });
