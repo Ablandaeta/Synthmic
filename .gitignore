@@ -33,3 +33,4 @@ dist-ssr
 # Agent directories and files
 .agent
 .agents
+skills-lock.json
