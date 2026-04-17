@@ -1,0 +1,131 @@
+/* =====================================================
+   WAVEFORM SELECTOR MODULE
+   Matches the reference image: label | toggle | icon
+   ===================================================== */
+
+.waveform-selector {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+  padding: 6px 8px 4px;
+  gap: 6px;
+}
+
+/* The vertical list of waveform options */
+.waveform-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  /* No flex:1 — let it size to content so margin:auto can center it */
+}
+
+/* Each row: [Label] [Switch] [Icon] */
+.waveform-row {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  height: 22px;
+}
+
+/* ---- LABEL ---- */
+.waveform-label {
+  flex: 0 0 auto;
+  width: 68px;       /* Reduced so total row fits rack-module 150px */
+  font-family: monospace;
+  font-size: 8.5px;
+  font-weight: 600;
+  letter-spacing: 0.6px;
+  text-transform: uppercase;
+  color: #a1887f;
+  text-align: right;
+  user-select: none;
+}
+
+/* ---- TOGGLE SWITCH ---- */
+.waveform-switch {
+  /* Reset button styles */
+  appearance: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+
+  /* Toggle track */
+  flex-shrink: 0;
+  width: 28px;
+  height: 14px;
+  background-color: #1a1a1a;
+  border-radius: 7px;
+  border: 1px solid #3e2723;
+  position: relative;
+  transition: background-color 0.15s ease, border-color 0.15s ease;
+  box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.6);
+}
+
+.waveform-switch__thumb {
+  display: block;
+  position: absolute;
+  top: 50%;
+  left: 3px;
+  transform: translateY(-50%);
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background-color: #5d4037;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
+  transition: left 0.15s ease, background-color 0.15s ease;
+}
+
+/* Active state — switch flips to the right, glows green */
+.waveform-switch--active {
+  background-color: #0a1a0a;
+  border-color: #1b5e20;
+}
+
+.waveform-switch--active .waveform-switch__thumb {
+  left: calc(100% - 11px);
+  background-color: #4ade80;
+  box-shadow: 0 0 6px rgba(74, 222, 128, 0.8);
+}
+
+/* Hover feedback */
+.waveform-switch:hover:not(.waveform-switch--active) {
+  border-color: #5d4037;
+}
+
+.waveform-switch:hover:not(.waveform-switch--active) .waveform-switch__thumb {
+  background-color: #795548;
+}
+
+/* ---- WAVEFORM ICON ---- */
+.waveform-icon {
+  flex-shrink: 0;
+  color: #5d4037;
+  display: flex;
+  align-items: center;
+  transition: color 0.15s ease;
+}
+
+.waveform-icon--active {
+  color: #eecfa1;
+  filter: drop-shadow(0 0 3px rgba(238, 207, 161, 0.4));
+}
+
+/* ---- FOOTER LABEL ---- */
+.waveform-footer-label {
+  margin: 0;
+  padding-top: 8px;
+  text-align: center;
+  font-family: monospace;
+  font-size: 8px;
+  font-weight: 600;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: #5d4037;
+  border-top: 1px solid #2b1d14;
+}

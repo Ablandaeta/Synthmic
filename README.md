@@ -50,6 +50,12 @@ bun run lint
 src/
 ├── components/
 │   ├── atoms/          # Componentes reutilizables (Key, Knob, Display)
+|   |   └──component/       # Componente genérico para atoms
+|   |       ├── index.tsx          # exportar el componente
+|   |       ├── style.css          # estilos del componente
+|   |       ├── component.tsx      # componente en si
+|   |       └── component.test.tsx # test del componente
+|   | 
 │   ├── modules/        # Módulos funcionales (Keyboard, OscillatorModule, MasterModule)
 │   └── layout/         # Layout principal (SynthChassis)
 ├── audio/

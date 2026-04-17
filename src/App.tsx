@@ -4,7 +4,7 @@ import { useSynth } from "@/hooks";
 import { SynthChassis } from "@/components/layout/SynthChassis";
 import { Keyboard } from "@/components/modules/Keyboard";
 import { Knob } from "@/components/atoms/Knob";
-import { Oscillator } from "@/components/modules/Oscillator";
+import { WaveformSelector } from "@/components/modules/WaveformSelector";
 import { Rack } from "@/components/layout/Rack/Rack";
 import { Wheels } from "@/components/modules/Wheels";
 
@@ -61,7 +61,7 @@ function App() {
       // SLOT 2: RACK DE MÓDULOS
       rack={
         <Rack>
-          <Oscillator />
+          <WaveformSelector />
         </Rack>
       }
       // SLOT 3: TECLADO
