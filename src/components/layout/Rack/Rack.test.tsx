@@ -19,10 +19,6 @@ describe("<Rack />", () => {
     expect(screen.getByTestId("module-b").parentElement).toHaveClass("rack-module");
   });
 
-  it("debería renderizar el espacio en blanco al final", () => {
-    render(<Rack><div /></Rack>);
-    expect(screen.getByText(/\+ Future FX Chain/i)).toBeInTheDocument();
-  });
 
   it("debería ignorar hijos nulos", () => {
     const { container } = render(
@@ -31,8 +27,8 @@ describe("<Rack />", () => {
         {null}
       </Rack>
     );
-    
-    // Debería haber un div.rack-module para el primer hijo y uno fijo rack-blank-space
+
+    // Solo debe haber un rack-module para el hijo válido
     const modules = container.querySelectorAll(".rack-module");
     expect(modules).toHaveLength(1);
   });

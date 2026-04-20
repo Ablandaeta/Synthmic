@@ -15,7 +15,7 @@ div.rack-module:has(.envelope-control) {
   flex-direction: column;
   justify-content: space-between;
   height: 100%;
-  padding: 10px 6px 8px;
+  padding: 4px 4px 0;
 }
 
 /* ── Top row: POLYPHONY + GLISSANDO ─────────────────────────────────────────── */
@@ -37,7 +37,7 @@ div.rack-module:has(.envelope-control) {
   justify-content: space-around;
   align-items: flex-start;
   padding-top: 10px;
-  padding-bottom: 30px;
+  /* padding-bottom is handled by module-panel__content (26px) */
 }
 
 /* ── Shared knob column ───────────────────────────────────────────────────────  */
@@ -47,16 +47,3 @@ div.rack-module:has(.envelope-control) {
   align-items: center;
 }
 
-/* ── Footer label ─────────────────────────────────────────────────────────────  */
-.envelope-footer-label {
-  margin: 0;
-  padding-top: 6px;
-  text-align: center;
-  font-family: monospace;
-  font-size: 8px;
-  font-weight: 600;
-  letter-spacing: 2px;
-  text-transform: uppercase;
-  color: #5d4037;
-  border-top: 1px solid #3e2723;
-}

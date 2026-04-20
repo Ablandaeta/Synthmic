@@ -1,0 +1,58 @@
+/* =====================================================
+   EQ PLACEHOLDER MODULE
+   Inactive visual panel — backend not yet implemented.
+   Layout handled by ModulePanel.
+   ===================================================== */
+
+/* ── Wider rack slot for EQ ─────────────────────────────────────────────────── */
+div.rack-module:has(.eq-placeholder) {
+  width: 180px;
+  overflow: hidden;
+}
+
+/* ── Root ─────────────────────────────────────────────────────────────────────  */
+.eq-placeholder {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+}
+
+/* ── Simulated EQ bars ──────────────────────────────────────────────────────── */
+.eq-placeholder__bands {
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  gap: 4px;
+  flex: 1;
+  min-height: 0;
+  width: 100%;
+  padding-bottom: 8px;
+  opacity: 0.2;
+}
+
+.eq-placeholder__bar {
+  flex: 1;
+  background: linear-gradient(to top, #5d4037, #3e2723);
+  border-radius: 2px 2px 0 0;
+  min-height: 4px;
+  max-height: 80px;
+}
+
+/* ── "Coming Soon" badge ─────────────────────────────────────────────────────── */
+.eq-placeholder__badge {
+  flex-shrink: 0;
+  font-family: monospace;
+  font-size: 7px;
+  font-weight: 700;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  color: #5d4037;
+  background-color: #1a1a1a;
+  border: 1px solid #3e2723;
+  border-radius: 3px;
+  padding: 2px 5px;
+  white-space: nowrap;
+  pointer-events: none;
+}
