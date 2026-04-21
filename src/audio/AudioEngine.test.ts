@@ -3,6 +3,7 @@ import { describe, it, expect, vi, beforeEach, afterEach, type Mock } from "vite
 import { AudioEngine } from "./AudioEngine";
 import { Oscillator } from "./Oscillator";
 import { LFO } from "./LFO";
+import { EQ } from "./EQ";
 
 // Mock de las clases satélite
 vi.mock("./Oscillator", () => {
@@ -22,6 +23,19 @@ vi.mock("./LFO", () => {
       return {
         start: vi.fn(),
         setDepth: vi.fn(),
+      };
+    }),
+  };
+});
+
+vi.mock("./EQ", () => {
+  return {
+    EQ: vi.fn().mockImplementation(function() {
+      return {
+        preEQGain: {}, // dummy sub-node for Osc injection
+        connectInput: vi.fn(),
+        connectOutput: vi.fn(),
+        updateBand: vi.fn(),
       };
     }),
   };
@@ -83,8 +97,11 @@ describe("AudioEngine", () => {
 
       expect(window.AudioContext).toHaveBeenCalledTimes(1);
       expect(mockCtx.createGain).toHaveBeenCalledTimes(1);
+      expect(EQ).toHaveBeenCalledTimes(1);
       
-      // Routing interno por defecto del Engine
+      // Routing interno modificado: EQ -> MasterGain -> Destination
+      const eqMock = (EQ as unknown as Mock).mock.results[0].value;
+      expect(eqMock.connectOutput).toHaveBeenCalledWith(mockMasterGain);
       expect(mockMasterGain.connect).toHaveBeenCalledWith(mockCtx.destination);
     });
 
@@ -174,6 +191,18 @@ describe("AudioEngine", () => {
     it("setModulation() no debería explotar en error si globalLFO falla y no ha sido instanciado", () => {
         expect(() => testEngine.setModulation(50)).not.toThrow();
     });
+
+    it("setEQBand() debería guardar la configuración en la UI state y mandársela al procesador de audio EQ", () => {
+      testEngine.setEQBand('band1', { frequency: 500, gain: 2.5 });
+
+      // Verificando que state de UI interno mutó y devolvió a la lectura
+      expect(testEngine.eqParams.band1.frequency).toBe(500);
+      expect(testEngine.eqParams.band1.gain).toBe(2.5);
+
+      // Verificando llamada de sub-capa (Caja Negra mock)
+      const eqMock = (EQ as unknown as Mock).mock.results[0].value;
+      expect(eqMock.updateBand).toHaveBeenCalledWith('band1', { frequency: 500, gain: 2.5 });
+    });
   });
 
   describe("Control de Notas y Polifonía", () => {
@@ -181,16 +210,18 @@ describe("AudioEngine", () => {
       testEngine = createAudioEngine();
     });
 
-    it("playTone() debería inicializar y registrar la asignación del oscilador con las propiedades actuales", () => {
+    it("playTone() debería inicializar y registrar la asignación del oscilador con las propiedades actuales y enviarlo al EQ", () => {
       testEngine.playTone(200);
       
+      const eqMock = (EQ as unknown as Mock).mock.results[0].value;
+
       expect(Oscillator).toHaveBeenCalledWith(
         mockCtx,
         testEngine.waveform,
         200,
         testEngine.detune,
         testEngine.envelope,
-        mockMasterGain,
+        eqMock.preEQGain, // Conectado directo al EQ
         undefined 
       );
     });
