@@ -7,7 +7,7 @@ import { type EQBandId, type EQBandParams } from "@/audio/EQ";
 
 export const EqModule = () => {
   const synth = useSynth();
-  const eqState = synth.eqParams;
+  const [eqState, setEqState] = useState(synth.eqParams);
 
   const [selectedBandIndex, setSelectedBandIndex] = useState<1 | 2 | 3 | 4>(1);
   const selectedBandKey = `band${selectedBandIndex}` as Extract<EQBandId, "band1" | "band2" | "band3" | "band4">;
@@ -15,6 +15,13 @@ export const EqModule = () => {
 
   const handleBandChange = (bandId: EQBandId, param: keyof EQBandParams, value: number) => {
     synth.setEQBand(bandId, { [param]: value });
+    setEqState(prev => ({
+      ...prev,
+      [bandId]: {
+        ...prev[bandId],
+        [param]: value
+      }
+    }));
   };
 
   return (
