@@ -22,7 +22,7 @@ export const EqModule = () => {
       <div className="eq-module-grid" aria-label="EQ Module">
         
         {/* ── CUADRANTE 1: HIGH PASS ── */}
-        <div className="eq-quadrant eq-quadrant-border-right eq-quadrant-border-bottom">
+        <div className=" eq-quadrant-border-right eq-quadrant-border-bottom">
           <h4 className="eq-quadrant-title">HIGH PASS</h4>
           <div className="eq-knobs-row">
             <Knob

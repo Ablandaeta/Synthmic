@@ -12,8 +12,7 @@ div.rack-module:has(.eq-module-grid) {
   height: 100%;
   display: grid;
   grid-template-columns: 1fr 1fr;
-  grid-template-rows: 1fr 1fr;
-  padding: 8px 4px;
+  grid-template-rows: 1fr 1fr;  
 }
 
 /* ── Estructura de cada Cuadrante ── */
@@ -22,7 +21,6 @@ div.rack-module:has(.eq-module-grid) {
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  padding: 8px;
 }
 
 /* Bordes internos sutiles para enmarcar como hardware */
