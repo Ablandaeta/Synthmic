@@ -6,7 +6,7 @@ import { Keyboard } from "@/components/modules/Keyboard";
 
 import { WaveformSelector } from "@/components/modules/WaveformSelector";
 import { EnvelopeControl } from "@/components/modules/EnvelopeControl";
-import { EqPlaceholder } from "@/components/modules/EqPlaceholder";
+import { EqModule } from "@/components/modules/EqModule";
 import { GenericControl } from "@/components/modules/GenericControl";
 import { Rack } from "@/components/layout/Rack/Rack";
 import { Wheels } from "@/components/modules/Wheels";
@@ -44,7 +44,7 @@ function App() {
         <Rack>
           <WaveformSelector />
           <EnvelopeControl />
-          <EqPlaceholder />
+          <EqModule />
           <GenericControl
             label="VOLUME"
             moduleLabel="VOLUME"
