@@ -1,5 +1,6 @@
 import { Oscillator, type Envelope } from './Oscillator';
 import { LFO } from './LFO';
+import { EQ, type EQBandId, type EQBandParams } from './EQ';
 // Extendemos el global Window para incluir webkitAudioContext de Safari
 declare global {
   interface Window {
@@ -28,6 +29,19 @@ export class AudioEngine {
     release: 0.5,
   };
   private globalLFO: LFO | null = null;
+  
+  // Instancia del ecualizador
+  private eq: EQ;
+  
+  // Estado actual del EQ (para la UI)
+  private currentEQ: Record<EQBandId, EQBandParams> = {
+    lowCut: { frequency: 20, Q: 0.707 }, // Roll-off inicial
+    band1: { frequency: 100, Q: 1, gain: 0 },
+    band2: { frequency: 500, Q: 1, gain: 0 },
+    band3: { frequency: 2000, Q: 1, gain: 0 },
+    band4: { frequency: 5000, Q: 1, gain: 0 },
+    highCut: { frequency: 20000, Q: 0.707 },
+  };
 
   constructor() {
     // Creamos el contexto
@@ -38,7 +52,11 @@ export class AudioEngine {
     // Creamos el canal maestro de volumen
     this.masterGain = this.ctx.createGain();
 
-    // Conectamos: Volumen -> Altavoces
+    // Instanciamos el EQ
+    this.eq = new EQ(this.ctx);
+
+    // Conectamos: EQ -> Volumen (masterGain) -> Altavoces (destination)
+    this.eq.connectOutput(this.masterGain);
     this.masterGain.connect(this.ctx.destination);
 
     // Volumen inicial
@@ -73,6 +91,9 @@ export class AudioEngine {
   get volume() {
     return this.masterGain.gain.value;
   }  
+  get eqParams() {
+    return this.currentEQ;
+  }
 
   // METHODS
   // Método para cambiar el volumen
@@ -118,6 +139,15 @@ export class AudioEngine {
     this.globalLFO.setDepth(depth);
   }
 
+  // Método para actualizar una banda del EQ
+  setEQBand(bandId: EQBandId, params: Partial<EQBandParams>) {
+    // 1. Actualizamos nuestro state interno para la UI
+    this.currentEQ[bandId] = { ...this.currentEQ[bandId], ...params };
+    
+    // 2. Mandamos la señal al procesador de audio real (EQ.ts)
+    this.eq.updateBand(bandId, params);
+  }
+
   // Método para tocar una nota
   playTone(frequency: number) {
     // Si ya está sonando, la paramos
@@ -135,7 +165,7 @@ export class AudioEngine {
       frequency,
       this.currentDetune,
       this.currentEnvelope,
-      this.masterGain,
+      this.eq.preEQGain, // Osc -> Envelope -> EQ
       this.globalLFO || undefined
     );
     this.activeOscillators.set(frequency, newOsc);

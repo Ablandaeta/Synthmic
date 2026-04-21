@@ -1,0 +1,44 @@
+/* =====================================================
+   MODULE PANEL — Base layout for all rack modules
+   All modules MUST wrap their content with this.
+
+   Guarantees:
+   - Consistent height (fills rack-module slot)
+   - Footer label always at the same position
+   - Content area won't overflow its flex container
+   ===================================================== */
+
+/* ── Root: column flex filling the entire rack slot ─────────────────────────── */
+.module-panel {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+/* ── Content area ────────────────────────────────────────────────────────────── */
+/* flex: 1         → takes all remaining space above the footer                  */
+/* min-height: 0   → prevents flex children from overflowing their container     */
+/* padding-bottom  → clearance so Knob atom labels (position:absolute,           */
+/*                   bottom:-1.5em ≈ 24px) don't overlap the footer border       */
+.module-panel__content {
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  padding-bottom: 26px;
+}
+
+/* ── Footer label — ALWAYS the same style across every module ───────────────── */
+.module-panel__footer {
+  flex-shrink: 0;       /* Never compress the footer */
+  margin: 0;
+  padding-top: 5px;
+  text-align: center;
+  font-family: monospace;
+  font-size: 8px;
+  font-weight: 600;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: #5d4037;
+  border-top: 1px solid #3e2723;
+}

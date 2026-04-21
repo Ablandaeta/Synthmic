@@ -1,0 +1,105 @@
+/* =====================================================
+   EQ MODULE
+   4-Quadrant Grid Layout
+   Layout handled by ModulePanel.
+   ===================================================== */
+
+div.rack-module:has(.eq-module-grid) {
+  width: 350px;
+}
+
+.eq-module-grid {
+  height: 100%;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: 1fr 1fr;  
+}
+
+/* ── Estructura de cada Cuadrante ── */
+.eq-quadrant {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+/* Bordes internos sutiles para enmarcar como hardware */
+.eq-quadrant-border-right {
+  border-right: 1px solid #3e2723;
+}
+
+.eq-quadrant-border-bottom {
+  border-bottom: 1px solid #3e2723;
+}
+
+/* ── Tipografía Consistente ── */
+.eq-quadrant-title {
+  font-family: monospace;
+  font-size: 8px;
+  color: #a1887f;
+  margin: 0;
+  margin-bottom: 12px;
+  letter-spacing: 1px;
+  text-align: center;
+  min-height: 12px; /* Altura constante para mantener la simetría */
+  line-height: 12px;
+}
+
+/* ── Filas de Knobs (Horizontales) ── */
+.eq-knobs-row {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 16px;
+  width: 100%;
+}
+
+/* ── Contenedor Selector de Banda (Reloj) ── */
+.eq-band-selector-container {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  /* Espacio extra para que quepan los números */
+  padding: 0.4em;
+}
+
+/* Para ocultar el aria-label si el knob imprime label vacío pero nos deja un div vacío */
+.eq-band-selector-container .knob-label {
+  display: none;
+}
+
+.eq-band-num {
+  position: absolute;
+  font-family: monospace;
+  font-size: 0.8em;
+  font-weight: bold;
+  color: #8d6e63;
+}
+
+/* Posiciones estilo reloj según requerimiento 
+   1: Posición a las 8 (abajo izquierda)
+   2: Posición a las 11 (arriba izquierda)
+   3: Posición a las 2 (arriba derecha)
+   4: Posición a las 6 (abajo derecha)
+*/
+
+.eq-band-num-1 {
+  bottom: 0px;
+  left: 4px;
+}
+
+.eq-band-num-2 {
+  top: 0px;
+  left: 4px;
+}
+
+.eq-band-num-3 {
+  top: 0px;
+  right: 4px;
+}
+
+.eq-band-num-4 {
+  bottom: 0px;
+  right: 4px;
+}

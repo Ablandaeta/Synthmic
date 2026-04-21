@@ -1,0 +1,18 @@
+/* =====================================================
+   GENERIC CONTROL MODULE
+   Narrow single-knob rack strip.
+   Layout handled by ModulePanel.
+   ===================================================== */
+
+/* ── Narrow rack slot ────────────────────────────────────────────────────────── */
+div.rack-module:has(.generic-control) {
+  width: 85px;
+}
+
+/* ── Content: centered knob ──────────────────────────────────────────────────── */
+.generic-control {
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}

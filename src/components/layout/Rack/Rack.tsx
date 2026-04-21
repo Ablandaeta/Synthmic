@@ -20,11 +20,6 @@ export const Rack = ({ children }: RackProps) => {
           </div>
         );
       })}
-      
-      {/* Opcional: El espacio vacío al final siempre fijo */}
-      <div className="rack-blank-space">
-        <span>+ Future FX Chain</span>
-      </div>
     </div>
   );
 };

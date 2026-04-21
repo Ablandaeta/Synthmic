@@ -1,0 +1,49 @@
+/* =====================================================
+   ENVELOPE CONTROL MODULE
+   Layout: [polyphony | glissando] / [A | D | S | R]
+   ===================================================== */
+
+/* ── Make the rack slot wider for this module ───────────────────────────────── */
+div.rack-module:has(.envelope-control) {
+  width: 230px;
+}
+
+/* ── Root container ─────────────────────────────────────────────────────────── */
+/*    space-between distribuye: top-row · adsr-row · footer a lo alto del rack   */
+.envelope-control {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  height: 100%;
+  padding: 4px 4px 0;
+}
+
+/* ── Top row: POLYPHONY + GLISSANDO ─────────────────────────────────────────── */
+/*    padding-bottom ≥ label height (font-size 1em ≈ 16px, bottom -1.5em = 24px)  */
+/*    Usamos 30px para tener 6px de buffer sobre el border                         */
+.envelope-top-row {
+  display: flex;
+  justify-content: space-around;
+  align-items: flex-start;
+  padding-bottom: 30px;
+  border-bottom: 1px solid #3e2723;
+}
+
+/* ── ADSR row ─────────────────────────────────────────────────────────────────  */
+/*    padding-top: separa del border superior                                      */
+/*    padding-bottom: deja espacio para los labels antes del footer border         */
+.envelope-adsr-row {
+  display: flex;
+  justify-content: space-around;
+  align-items: flex-start;
+  padding-top: 10px;
+  /* padding-bottom is handled by module-panel__content (26px) */
+}
+
+/* ── Shared knob column ───────────────────────────────────────────────────────  */
+.envelope-knob-col {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+

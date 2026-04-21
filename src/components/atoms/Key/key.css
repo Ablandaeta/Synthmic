@@ -1,32 +1,47 @@
-/* La base del diente */
+/* La base del diente - colmillo */
 .key-tooth {
   position: relative;
   width: 60px;
   height: 200px;
-  background-color: var(--text-color); /* Color Hueso */
-  border: 2px solid #1a110d7a; /* Borde oscuro para definir */
-  border-top: none; 
-  border-radius: 0 0 75px 25px; /* ¡La forma de colmillo! */
+  /* Hueso con dirty/worn effect */
+  background:
+    linear-gradient(to right, var(--mimic-bone-dirty) 0%, var(--mimic-bone) 40%, var(--mimic-bone) 70%, var(--mimic-bone-dirty) 100%);
+  border: 2px solid rgba(26,17,13,0.6);
+  border-top: none;
+  border-radius: 0 0 75px 25px;
   cursor: pointer;
   transition: all 0.1s ease;
-  
-  /* Sombra para darle volumen 3D */
-  box-shadow: inset -5px -5px 15px rgba(0,0,0,0.2);
+
+  /* 3D volume + base orgánica (encía) se muestra en la parte superior */
+  box-shadow:
+    inset -5px -5px 15px rgba(0,0,0,0.15),
+    inset 0 40px 30px rgba(107,68,35,0.3), /* base de encía */
+    2px 4px 8px rgba(0,0,0,0.4);
 }
 
 /* Efecto al presionar (se hunde un poco) */
 .key-tooth:active, .key-tooth.pressed {
   transform: translateY(5px);
-  box-shadow: inset 0 0 50px rgba(0,0,0,0.5);
+  box-shadow:
+    inset 0 0 50px rgba(0,0,0,0.4),
+    inset 0 40px 30px rgba(107,68,35,0.5),
+    1px 2px 4px rgba(0,0,0,0.3);
 }
 
-/* --- TECLAS NEGRAS --- */
+/* --- TECLAS NEGRAS - dentes podridos en encía oscura --- */
 .key-tooth.black {
-  background-color: #4a3b2a; /* Madera muy oscura o diente podrido */
+  /* Diente podrido en encía oscura */
+  background:
+    linear-gradient(to bottom, var(--mimic-gum) 0%, #3a2a1a 60%, #2a1a0a 100%);
   width: 40px;
   height: 120px;
-  z-index: 2; /* Para que flote encima de las blancas */
-  position: absolute; 
-  left: 70%; /* Se coloca para posicionar entre las blancas */
-  border-radius: 0 0 25px 50px;  
+  z-index: 2;
+  position: absolute;
+  left: 70%;
+  border-radius: 0 0 25px 50px;
+  /* Sombreado para integración con encía */
+  box-shadow:
+    inset 0 0 10px rgba(0,0,0,0.5),
+    inset 2px 0 4px rgba(107,68,35,0.3),
+    2px 4px 6px rgba(0,0,0,0.5);
 }
