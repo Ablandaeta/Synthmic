@@ -4,12 +4,12 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
-    "dev": "bunx --bun vite",
-    "build": "tsc -b && bunx --bun vite build",
-    "lint": "eslint .",
-    "preview": "vite preview",
-    "test": "vitest"
-  },
+  "dev": "pnpm vite",
+  "build": "tsc -b && pnpm vite build",
+  "lint": "eslint .",
+  "preview": "pnpm vite preview",
+  "test": "pnpm vitest"
+},
   "dependencies": {
     "react": "^19.2.0",
     "react-dom": "^19.2.0"
