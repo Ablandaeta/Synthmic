@@ -18,7 +18,7 @@
   
   border: 12px solid #2b1d14; /* Marco grueso exterior */
   border-radius: 20px;         /* Bordes suavizados */
-  padding: 30px;
+  padding: 20px;
   
   /* Sombra potente para dar sensación de peso y altura */
   box-shadow: 
@@ -29,7 +29,7 @@
   flex-direction: column;
   gap: 25px; /* Espacio vertical entre las filas del rack */
   
-  max-width: 900px;
+  max-width: 1000px;
   width: 100%;
 }
 /* --- FILA SUPERIOR: Header + Master Section --- */
