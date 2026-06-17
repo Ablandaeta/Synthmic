@@ -35,12 +35,12 @@ export class AudioEngine {
   
   // Estado actual del EQ (para la UI)
   private currentEQ: Record<EQBandId, EQBandParams> = {
-    lowCut: { frequency: 20, Q: 0.707 }, // Roll-off inicial
+    lowCut: { frequency: 20, Q: 0.70 }, // Roll-off inicial
     band1: { frequency: 100, Q: 1, gain: 0 },
     band2: { frequency: 500, Q: 1, gain: 0 },
     band3: { frequency: 2000, Q: 1, gain: 0 },
     band4: { frequency: 5000, Q: 1, gain: 0 },
-    highCut: { frequency: 20000, Q: 0.707 },
+    highCut: { frequency: 20000, Q: 0.70 },
   };
 
   constructor() {
@@ -54,6 +54,11 @@ export class AudioEngine {
 
     // Instanciamos el EQ
     this.eq = new EQ(this.ctx);
+
+    // Sincronizar filtros EQ con currentEQ
+    for (const [bandId, params] of Object.entries(this.currentEQ)) {
+      this.eq.updateBand(bandId as EQBandId, params);
+    }
 
     // Conectamos: EQ -> Volumen (masterGain) -> Altavoces (destination)
     this.eq.connectOutput(this.masterGain);
