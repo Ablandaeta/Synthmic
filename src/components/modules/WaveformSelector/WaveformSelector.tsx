@@ -24,7 +24,7 @@ const WAVE_OPTIONS: WaveOption[] = [
   { type: "triangle",   label: "TRIANGLE",    Icon: TriangleIcon },
   { type: "square",     label: "SQUARE",      Icon: SquareIcon },
   { type: "sawtooth",   label: "SAWTOOTH",    Icon: SawtoothIcon },
-  { type: "whitenoise", label: "WHITE NOISE", Icon: WhiteNoiseIcon },
+  //{ type: "whitenoise", label: "WHITE NOISE", Icon: WhiteNoiseIcon },
 ];
 
 // ── Component ──────────────────────────────────────────────────────────────────
