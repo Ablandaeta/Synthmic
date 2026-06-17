@@ -57,10 +57,10 @@ export const EqModule = () => {
         <div className="eq-quadrant eq-quadrant-border-bottom">
           <h4 className="eq-quadrant-title">BAND SELECT</h4>
           <div className="eq-band-selector-container">
-            <div className="eq-band-num eq-band-num-1">1</div>
-            <div className="eq-band-num eq-band-num-2">2</div>
-            <div className="eq-band-num eq-band-num-3">3</div>
-            <div className="eq-band-num eq-band-num-4">4</div>
+            <span className="eq-band-num eq-band-num-1">1</span>
+            <span className="eq-band-num eq-band-num-2">2</span>
+            <span className="eq-band-num eq-band-num-3">3</span>
+            <span className="eq-band-num eq-band-num-4">4</span>
             <Knob
               label="BAND SELECTOR"
               min={1}
