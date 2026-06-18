@@ -30,17 +30,22 @@ export class AudioEngine {
   };
   private globalLFO: LFO | null = null;
   
+  private monoOscillator: Oscillator | null = null;
+  private monoNoteFrequency: number | null = null;
+
+  private currentGlissando: number = 0;
+
   // Instancia del ecualizador
   private eq: EQ;
   
   // Estado actual del EQ (para la UI)
   private currentEQ: Record<EQBandId, EQBandParams> = {
-    lowCut: { frequency: 20, Q: 0.707 }, // Roll-off inicial
+    lowCut: { frequency: 20, Q: 0.70 }, // Roll-off inicial
     band1: { frequency: 100, Q: 1, gain: 0 },
     band2: { frequency: 500, Q: 1, gain: 0 },
     band3: { frequency: 2000, Q: 1, gain: 0 },
     band4: { frequency: 5000, Q: 1, gain: 0 },
-    highCut: { frequency: 20000, Q: 0.707 },
+    highCut: { frequency: 20000, Q: 0.70 },
   };
 
   constructor() {
@@ -54,6 +59,11 @@ export class AudioEngine {
 
     // Instanciamos el EQ
     this.eq = new EQ(this.ctx);
+
+    // Sincronizar filtros EQ con currentEQ
+    for (const [bandId, params] of Object.entries(this.currentEQ)) {
+      this.eq.updateBand(bandId as EQBandId, params);
+    }
 
     // Conectamos: EQ -> Volumen (masterGain) -> Altavoces (destination)
     this.eq.connectOutput(this.masterGain);
@@ -87,6 +97,9 @@ export class AudioEngine {
   }
   get detune() {
     return this.currentDetune;
+  }
+  get glissando() {
+    return this.currentGlissando;
   }
   get volume() {
     return this.masterGain.gain.value;
@@ -122,6 +135,10 @@ export class AudioEngine {
     }
   }
 
+  setGlissando(value: number) {
+    this.currentGlissando = Math.max(0, Math.min(1, value));
+  }
+
   // Método para cambiar el detune
   setPitchBend(cents: number) {
     this.currentDetune = cents;
@@ -150,6 +167,17 @@ export class AudioEngine {
 
   // Método para tocar una nota
   playTone(frequency: number) {
+    // Mono legato glissando mode: glide instead of retrigger
+    if (this.polyphony === 1 && this.currentGlissando > 0 && this.monoOscillator !== null) {
+      const glideTime = this.currentGlissando * 2;
+      this.monoOscillator.glideFrequency(frequency, glideTime);
+      if (this.monoNoteFrequency !== null) {
+        this.activeOscillators.delete(this.monoNoteFrequency);
+      }
+      this.activeOscillators.set(frequency, this.monoOscillator);
+      this.monoNoteFrequency = frequency;
+      return;
+    }
     // Si ya está sonando, la paramos
     if (this.activeOscillators.has(frequency)) {
       this.activeOscillators.get(frequency)?.stop();
@@ -169,6 +197,11 @@ export class AudioEngine {
       this.globalLFO || undefined
     );
     this.activeOscillators.set(frequency, newOsc);
+
+    if (this.polyphony === 1) {
+      this.monoOscillator = newOsc;
+      this.monoNoteFrequency = frequency;
+    }
   }
 
   // Método para detener una nota
@@ -177,6 +210,10 @@ export class AudioEngine {
     if (osc) {
       osc.stop();
       this.activeOscillators.delete(frequency);
+      if (this.polyphony === 1) {
+        this.monoOscillator = null;
+        this.monoNoteFrequency = null;
+      }
     }
   }
 

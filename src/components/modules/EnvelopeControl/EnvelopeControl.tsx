@@ -53,10 +53,15 @@ export const EnvelopeControl = () => {
   const [envelope, setEnvelopeState] = useState<Envelope>(synth.envelope);
   const [glissando, setGlissando] = useState<number>(0);
 
+  const glissandoDisabled = polyphony !== 1;
+
   const handlePolyphonyChange = (v: number) => {
     const rounded = Math.round(v);
     setPolyphonyState(rounded);
     synth.setPolyphony(rounded);
+    if (rounded !== 1) {
+      setGlissando(0);
+    }
   };
 
   const handleEnvelopeChange = (key: keyof Envelope, v: number) => {
@@ -88,9 +93,10 @@ export const EnvelopeControl = () => {
               min={0}
               max={1}
               value={glissando}
-              onChange={setGlissando}
-              formatTooltip={(v) => `${Math.round(v * 100)}%`}
+              onChange={(v) => { setGlissando(v); synth.setGlissando(v); }}
+              formatTooltip={(v) => `${(v * 2).toFixed(2)}s`}
               size={46}
+              disabled={glissandoDisabled}
             />
           </div>
         </div>

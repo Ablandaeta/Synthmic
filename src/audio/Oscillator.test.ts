@@ -178,4 +178,14 @@ describe("Oscillator", () => {
         0.02 
     );
   });
+
+  it("glideFrequency() debería programar un ramp lineal de frecuencia", () => {
+    testOsc = createOscillator();
+
+    testOsc.glideFrequency(880, 0.5);
+
+    expect(mockOscNode.frequency?.cancelScheduledValues).toHaveBeenCalledWith(0);
+    expect(mockOscNode.frequency?.setValueAtTime).toHaveBeenCalledWith(440, 0);
+    expect(mockOscNode.frequency?.linearRampToValueAtTime).toHaveBeenCalledWith(880, 0.5);
+  });
 });
