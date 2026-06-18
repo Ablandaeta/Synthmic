@@ -30,6 +30,11 @@ export class AudioEngine {
   };
   private globalLFO: LFO | null = null;
   
+  private monoOscillator: Oscillator | null = null;
+  private monoNoteFrequency: number | null = null;
+
+  private currentGlissando: number = 0;
+
   // Instancia del ecualizador
   private eq: EQ;
   
@@ -93,6 +98,9 @@ export class AudioEngine {
   get detune() {
     return this.currentDetune;
   }
+  get glissando() {
+    return this.currentGlissando;
+  }
   get volume() {
     return this.masterGain.gain.value;
   }  
@@ -127,6 +135,10 @@ export class AudioEngine {
     }
   }
 
+  setGlissando(value: number) {
+    this.currentGlissando = Math.max(0, Math.min(1, value));
+  }
+
   // Método para cambiar el detune
   setPitchBend(cents: number) {
     this.currentDetune = cents;
@@ -155,6 +167,17 @@ export class AudioEngine {
 
   // Método para tocar una nota
   playTone(frequency: number) {
+    // Mono legato glissando mode: glide instead of retrigger
+    if (this.polyphony === 1 && this.currentGlissando > 0 && this.monoOscillator !== null) {
+      const glideTime = this.currentGlissando * 2;
+      this.monoOscillator.glideFrequency(frequency, glideTime);
+      if (this.monoNoteFrequency !== null) {
+        this.activeOscillators.delete(this.monoNoteFrequency);
+      }
+      this.activeOscillators.set(frequency, this.monoOscillator);
+      this.monoNoteFrequency = frequency;
+      return;
+    }
     // Si ya está sonando, la paramos
     if (this.activeOscillators.has(frequency)) {
       this.activeOscillators.get(frequency)?.stop();
@@ -174,6 +197,11 @@ export class AudioEngine {
       this.globalLFO || undefined
     );
     this.activeOscillators.set(frequency, newOsc);
+
+    if (this.polyphony === 1) {
+      this.monoOscillator = newOsc;
+      this.monoNoteFrequency = frequency;
+    }
   }
 
   // Método para detener una nota
@@ -182,6 +210,10 @@ export class AudioEngine {
     if (osc) {
       osc.stop();
       this.activeOscillators.delete(frequency);
+      if (this.polyphony === 1) {
+        this.monoOscillator = null;
+        this.monoNoteFrequency = null;
+      }
     }
   }
 

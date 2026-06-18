@@ -12,6 +12,7 @@ vi.mock("./Oscillator", () => {
       return {
         stop: vi.fn(),
         setDetune: vi.fn(),
+        glideFrequency: vi.fn(),
       };
     }),
   };
@@ -192,6 +193,17 @@ describe("AudioEngine", () => {
         expect(() => testEngine.setModulation(50)).not.toThrow();
     });
 
+    it("setGlissando() debería guardar el valor y clamp entre 0-1", () => {
+      testEngine.setGlissando(0.5);
+      expect(testEngine.glissando).toBe(0.5);
+
+      testEngine.setGlissando(1.5);
+      expect(testEngine.glissando).toBe(1);
+
+      testEngine.setGlissando(-0.5);
+      expect(testEngine.glissando).toBe(0);
+    });
+
     it("setEQBand() debería guardar la configuración en la UI state y mandársela al procesador de audio EQ", () => {
       testEngine.setEQBand('band1', { frequency: 500, gain: 2.5 });
 
@@ -271,6 +283,62 @@ describe("AudioEngine", () => {
       testEngine.stopTone(1000);
       
       expect(miOscMock.stop).toHaveBeenCalledTimes(1);
+    });
+
+    it("playTone() con polyphony=1 y glissando>0 debería hacer glide sin crear nuevo oscilador", () => {
+      testEngine.setPolyphony(1);
+      testEngine.setGlissando(0.5);
+      const oscCountBefore = (Oscillator as unknown as Mock).mock.results.length;
+
+      testEngine.playTone(440);
+
+      const firstOsc = (Oscillator as unknown as Mock).mock.results[oscCountBefore]?.value;
+
+      testEngine.playTone(880);
+
+      expect(Oscillator).toHaveBeenCalledTimes(oscCountBefore + 1);
+      expect(firstOsc.glideFrequency).toHaveBeenCalledWith(880, 1);
+    });
+
+    it("stopTone() con la frecuencia anterior no debería detener el oscilador después de un glide", () => {
+      testEngine.setPolyphony(1);
+      testEngine.setGlissando(0.5);
+      testEngine.playTone(262);
+      const oscMock = (Oscillator as unknown as Mock).mock.results[0].value;
+
+      testEngine.playTone(330); // glide from 262 to 330
+
+      // Simulate releasing original key - should NOT stop the oscillator
+      testEngine.stopTone(262);
+
+      // The oscillator should NOT have been stopped
+      expect(oscMock.stop).not.toHaveBeenCalled();
+    });
+
+    it("playTone() con polyphony>1 debería ignorar glissando", () => {
+      testEngine.setPolyphony(4);
+      testEngine.setGlissando(0.5);
+      const oscCountBefore = (Oscillator as unknown as Mock).mock.results.length;
+
+      testEngine.playTone(440);
+      testEngine.playTone(880);
+
+      expect(Oscillator).toHaveBeenCalledTimes(oscCountBefore + 2);
+    });
+
+    it("debería encadenar glissando en 3+ notas sin reiniciarse", () => {
+      testEngine.setPolyphony(1);
+      testEngine.setGlissando(0.5);
+
+      testEngine.playTone(262); // C4
+      testEngine.playTone(330); // E4 - glide from 262
+      testEngine.stopTone(262); // release C4 (re-keyed, should be no-op)
+
+      // mono tracking should still be intact → 3rd note glides
+      testEngine.playTone(392); // G4 - should glide from 330
+
+      // Oscillator constructor should only have been called once (first note)
+      expect(Oscillator).toHaveBeenCalledTimes(1);
     });
   });
 });

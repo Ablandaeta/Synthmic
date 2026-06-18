@@ -91,4 +91,11 @@ export class Oscillator {
     const now = this.ctx.currentTime;
     this.osc.detune.setTargetAtTime(cents, now, 0.02);
   }
+
+  glideFrequency(targetFreq: number, glideTime: number): void {
+    const now = this.ctx.currentTime;
+    this.osc.frequency.cancelScheduledValues(now);
+    this.osc.frequency.setValueAtTime(this.osc.frequency.value, now);
+    this.osc.frequency.linearRampToValueAtTime(targetFreq, now + glideTime);
+  }
 }
