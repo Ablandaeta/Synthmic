@@ -9,6 +9,7 @@ const mockSynth = {
   envelope: { attack: 0.1, decay: 0.2, sustain: 0.7, release: 0.5 },
   setPolyphony: vi.fn(),
   setEnvelope: vi.fn(),
+  setGlissando: vi.fn(),
 };
 
 vi.mock("@/hooks", () => ({
@@ -86,8 +87,8 @@ describe("<EnvelopeControl />", () => {
     expect(call).toHaveProperty("attack");
   });
 
-  // TEST 5 — GLISSANDO es UI-only: NO llama a ningún método del backend
-  it("no debería llamar a ningún método del synth al interactuar con GLISSANDO", async () => {
+  // TEST 5 — GLISSANDO llama a setGlissando del backend
+  it("debería llamar a setGlissando del synth al interactuar con el knob GLISSANDO", async () => {
     render(<EnvelopeControl />);
 
     const glissandoKnob = screen.getByLabelText("GLISSANDO");
@@ -96,8 +97,43 @@ describe("<EnvelopeControl />", () => {
       fireEvent.mouseDown(glissandoKnob);
     });
 
-    // GLISSANDO es solo UI — no hay backend todavía
-    expect(mockSynth.setPolyphony).not.toHaveBeenCalled();
-    expect(mockSynth.setEnvelope).not.toHaveBeenCalled();
+    expect(mockSynth.setGlissando).toHaveBeenCalled();
+  });
+
+  // TEST 6 — GLISSANDO deshabilitado cuando polyphony !== 1
+  it("debería deshabilitar el knob GLISSANDO cuando polyphony !== 1", () => {
+    const { container } = render(<EnvelopeControl />);
+
+    const disabledSockets = container.querySelectorAll('.knob-socket--disabled');
+    expect(disabledSockets.length).toBeGreaterThanOrEqual(1);
+  });
+
+  // TEST 7 — Resetea glissando al cambiar de mono a poli
+  it("debería resetear glissando a 0 cuando polyphony cambia a > 1", async () => {
+    render(<EnvelopeControl />);
+
+    const glissandoKnob = screen.getByLabelText("GLISSANDO");
+    const polyphonyKnob = screen.getByLabelText("POLYPHONY");
+
+    // Primera interacción con GLISSANDO: 0 → 0.1
+    await act(async () => {
+      fireEvent.mouseDown(glissandoKnob);
+    });
+    expect(mockSynth.setGlissando).toHaveBeenCalledWith(0.1);
+
+    vi.clearAllMocks();
+
+    // Interacción con POLYPHONY: rounded=8, !==1, resetea glissando a 0
+    await act(async () => {
+      fireEvent.mouseDown(polyphonyKnob);
+    });
+
+    // Segunda interacción con GLISSANDO: debe empezar desde 0 otra vez
+    await act(async () => {
+      fireEvent.mouseDown(glissandoKnob);
+    });
+
+    // Si se reseteó, es 0.1; de lo contrario sería 0.2
+    expect(mockSynth.setGlissando).toHaveBeenCalledWith(0.1);
   });
 });
