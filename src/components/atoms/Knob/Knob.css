@@ -66,6 +66,31 @@
   pointer-events: none; /* Que no estorbe al click */
 }
 
+/* El párpado (cubre el ojo cuando está deshabilitado) */
+.knob-eyelid {
+  position: absolute;
+  inset: 0;
+  background: #3e2723;
+  border-radius: 50%;
+  clip-path: ellipse(50% 0% at 50% 0%);
+  transition: clip-path 0.35s ease;
+  z-index: 2;
+  pointer-events: none;
+}
+
+.knob-socket--disabled .knob-eyelid {
+  clip-path: ellipse(50% 43% at 50% 43%);
+}
+
+.knob-socket--disabled .knob-eyeball {
+  filter: grayscale(0.7) brightness(0.5);
+  cursor: not-allowed;
+}
+
+.knob-socket--disabled {
+  cursor: not-allowed;
+}
+
 /* Etiqueta debajo */
 .knob-label {
   position: absolute;

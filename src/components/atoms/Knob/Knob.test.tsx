@@ -68,4 +68,24 @@ describe('<Knob />', () => {
     await user.hover(socket);
     expect(screen.getByText('VAL: 42')).toBeInTheDocument();
   });
+
+  it('debería añadir la clase knob-socket--disabled cuando disabled=true', () => {
+    const { container } = render(<Knob value={0.5} disabled onChange={() => {}} />);
+    const socket = container.querySelector('.knob-socket');
+    expect(socket).toHaveClass('knob-socket--disabled');
+  });
+
+  it('no debería responder al mouse cuando disabled=true', () => {
+    const onChange = vi.fn();
+    const { container } = render(<Knob value={50} min={0} max={100} disabled onChange={onChange} />);
+    
+    const eyeball = container.querySelector('.knob-eyeball');
+    if (!eyeball) throw new Error('No se encontró el elemento arrastrable');
+
+    fireEvent.mouseDown(eyeball, { clientY: 100 });
+    fireEvent.mouseMove(window, { clientY: 50 });
+    fireEvent.mouseUp(window);
+
+    expect(onChange).not.toHaveBeenCalled();
+  });
 });

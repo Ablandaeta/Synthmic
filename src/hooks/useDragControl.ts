@@ -6,6 +6,7 @@ interface UseDragControlProps {
   min: number;
   max: number;
   sensitivity?: number; // Opcional: para ajustar qué tan rápido gira
+  disabled?: boolean;
 }
 
 export const useDragControl = ({ 
@@ -13,7 +14,8 @@ export const useDragControl = ({
   onChange, 
   min, 
   max, 
-  sensitivity = 200 
+  sensitivity = 200,
+  disabled = false,
 }: UseDragControlProps) => {
   
   const [isDragging, setIsDragging] = useState(false);
@@ -22,6 +24,7 @@ export const useDragControl = ({
 
   // Esta función se la daremos al <div> para que sepa cuándo empezar
   const handleMouseDown = (e: React.MouseEvent) => {
+    if (disabled) return;
     setIsDragging(true);
     startYRef.current = e.clientY;
     startValueRef.current = value; // Guardamos el valor que tenía al empezar

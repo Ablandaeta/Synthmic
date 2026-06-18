@@ -10,6 +10,7 @@ interface KnobProps {
   onChange: (value: number) => void;
   formatTooltip?: (val: number) => string
   size?: number
+  disabled?: boolean
 }
 
 interface CustomCSS extends React.CSSProperties {
@@ -20,7 +21,8 @@ export const Knob = ({
   label, min = 0, max = 1, value, onChange, 
   // Por defecto, formateamos a porcentaje, pero se puede cambiar desde fuera
   formatTooltip = (v) => `${Math.round(((v - min) / (max - min)) * 100)}%`,
-  size = 80 
+  size = 80,
+  disabled = false,
 }: KnobProps) => {
   
   // Usamos el hook para manejar la lógica de arrastre
@@ -28,7 +30,8 @@ export const Knob = ({
     value, 
     onChange, 
     min, 
-    max 
+    max,
+    disabled,
   });
   // Usamos el hook para manejar el hover (para mostrar el tooltip)
   const { isHovered, hoverHandlers } = useHover();
@@ -38,7 +41,7 @@ export const Knob = ({
   const rotation = -135 + (percentage * 270);
   
   return (
-    <div className="knob-socket"
+    <div className={`knob-socket${disabled ? ' knob-socket--disabled' : ''}`}
     {...hoverHandlers}
     style={{'--knob-size': `${size}px` } as CustomCSS}
     >
@@ -47,6 +50,7 @@ export const Knob = ({
         isShow={isDragging || isHovered} 
         
       />
+      <div className="knob-eyelid" />
       <div 
         className="knob-eyeball" 
         onMouseDown={handleMouseDown} // Conectamos el evento del hook aquí
